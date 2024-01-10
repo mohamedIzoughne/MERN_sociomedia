@@ -1,0 +1,29 @@
+.modal {
+  transform: translate(-50%, -50%);
+  animation: popup 0.5s ease;
+}
+
+.frame {
+  animation: showup 0.5s ease;
+}
+
+@keyframes popup {
+  0% {
+    transform: scale(0.8) translate(-50%, -50%);
+  }
+  50% {
+    transform: scale(1.2) translate(-50%, -50%);
+  }
+  100% {
+    transform: scale(1) translate(-50%, -50%);
+  }
+}
+
+@keyframes showup {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
