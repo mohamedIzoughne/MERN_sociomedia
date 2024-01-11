@@ -8,7 +8,6 @@ const feedRoutes = require("./routes/feed")
 const userRoutes = require("./routes/profile")
 const User = require("./models/user")
 const multer = require("multer")
-const isAuth = require("./middleware/is-auth")
 
 const fileStorage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -71,6 +70,6 @@ app.use((error, req, res, next) => {
   return res.status(status).json({ message })
 })
 
-mongoose.connect(process.env.MONGO_URL).then(() => {
+mongoose.connect(process.env.MONGO_URI).then(() => {
   app.listen(process.env.PORT || 3000)
 })
