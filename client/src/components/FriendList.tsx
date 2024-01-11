@@ -40,7 +40,9 @@ const FriendList: React.FC<propsType> = ({ friends, updateUser }) => {
                 <div className="image w-14 h-14 overflow-hidden rounded-full">
                   <img
                     className="w-full"
-                    src={`http://localhost:3000/${friend?.imageUrl}`}
+                    src={`${
+                      import.meta.env.VITE_SERVER_API + friend?.imageUrl
+                    }`}
                     alt=""
                   />
                 </div>

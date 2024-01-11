@@ -30,7 +30,10 @@ const UserInfo: React.FC<{
       <div className="row flex items-center border-b-2 border-secondary border-solid pb-3">
         <Link className="flex items-center" to={`/user/${user?._id}`}>
           <div className="image-holder w-14 h-14 overflow-hidden rounded-full">
-            <img src={`http://localhost:3000/${user?.imageUrl}`} alt="" />
+            <img
+              src={`${(process.env.SERVER_API || "") + (user?.imageUrl || "")}`}
+              alt=""
+            />
           </div>
           <div className="info pl-3">
             <h3 className="leading-none">{user?.fullName}</h3>

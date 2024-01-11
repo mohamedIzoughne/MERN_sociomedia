@@ -15,9 +15,13 @@ const useHttp = () => {
     options: optionsType,
     successHandler: (data?: responseType) => void
   ) {
+    console.log(import.meta.env.VITE_SERVER_API)
     setIsLoading(true)
     try {
-      const response = await fetch(`http://localhost:3000/${endpoint}`, options)
+      const response = await fetch(
+        `${(import.meta.env.VITE_SERVER_API || "") + endpoint}`,
+        options
+      )
       const data = await response.json()
       if (response.ok) {
         successHandler(data)

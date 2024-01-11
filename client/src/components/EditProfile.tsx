@@ -9,8 +9,8 @@ const EditProfile: React.FC<{
   user?: userType
   updateUser: () => void
 }> = ({ onClick: clickHandler, user, updateUser }) => {
-  const imageInputRef = useRef()
-  const fullNameInputRef = useRef()
+  const imageInputRef = useRef<HTMLInputElement>(null)
+  const fullNameInputRef = useRef<HTMLInputElement>(null)
   const emailInputRef = useRef()
   const locationInputRef = useRef()
   const jobInputRef = useRef()
@@ -33,8 +33,9 @@ const EditProfile: React.FC<{
     for (key in userInfo) {
       form.append(key, userInfo[key])
     }
-
-    form.append("image", imageInputRef.current?.files[0])
+    if (imageInputRef.current?.files[0]) {
+      form.append("image", imageInputRef.current?.files[0])
+    }
 
     const options = {
       method: "POST",
@@ -59,7 +60,12 @@ const EditProfile: React.FC<{
           className="profile-image mx-auto rounded-full w-[85px] h-[85px] overflow-hidden 
         text-center"
         >
-          <img src={`http://localhost:3000/${user?.imageUrl}`} alt="" />
+          <img
+            src={`${
+              (import.meta.env.VITE_SERVER_API || "") + (user?.imageUrl || "")
+            } `}
+            alt=""
+          />
         </div>
         <input type="file" ref={imageInputRef} />
       </div>
@@ -132,10 +138,10 @@ const EditProfile: React.FC<{
 }
 
 export default EditProfile
-function sendData(
-  arg0: string,
-  options: { method: string; body: FormData },
-  arg2: () => void
-) {
-  throw new Error("Function not implemented.")
-}
+// function sendData(
+//   arg0: string,
+//   options: { method: string; body: FormData },
+//   arg2: () => void
+// ) {
+//   throw new Error("Function not implemented.")
+// }

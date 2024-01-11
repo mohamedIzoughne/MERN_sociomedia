@@ -72,7 +72,12 @@ const Post: React.FC<propsType> = ({
     <li className="bg-white p-3 rounded-md mb-5">
       <div className="flex pb-3 items-center rounded-md">
         <div className="image w-14 h-14 overflow-hidden rounded-full">
-          <img src={`http://localhost:3000/${post.creator.imageUrl}`} alt="" />
+          <img
+            src={`${
+              (process.env.SERVER_API || "") + (post.creator.imageUrl || "")
+            }`}
+            alt=""
+          />
         </div>
         <div className="info">
           <Link
@@ -101,7 +106,13 @@ const Post: React.FC<propsType> = ({
         <p className="mb-2">{currentPost.content}</p>
         <div className="flex justify-center">
           {post?.imageUrl ? (
-            <img src={`http://localhost:3000/${currentPost.imageUrl}`} alt="" />
+            <img
+              src={`${
+                (import.meta.env.VITE_SERVER_API || "") +
+                (currentPost.imageUrl || "")
+              }`}
+              alt=""
+            />
           ) : (
             ""
           )}
