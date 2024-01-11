@@ -57,7 +57,7 @@ const Post: React.FC<propsType> = ({
 
     const postId = e.currentTarget.dataset.post_id
 
-    sendData(`feed/update-like/${postId}`, options, (res) => {})
+    sendData(`feed/update-like/${postId}`, options, () => {})
   }
 
   const checkIfNotUser = (id: string) => {

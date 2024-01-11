@@ -24,10 +24,14 @@ const AddComment: React.FC<{
       },
     }
 
-    sendData(`feed/add-comment/${postId}`, options, (result) => {
-      onToggle()
-      onComment(result)
-    })
+    sendData(
+      `feed/add-comment/${postId}`,
+      options,
+      (result?: { post: postType }) => {
+        onToggle()
+        if (result) onComment(result)
+      }
+    )
   }
 
   return (
