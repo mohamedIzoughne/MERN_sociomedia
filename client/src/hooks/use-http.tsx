@@ -27,7 +27,7 @@ const useHttp = () => {
         throw new Error(data.message)
       }
     } catch (err) {
-      setErrorMessage(err.message)
+      if (err instanceof Error) setErrorMessage(err.message)
     }
 
     setIsLoading(false)

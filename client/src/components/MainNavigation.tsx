@@ -50,7 +50,7 @@ const MainNavigation = () => {
             </li>
             <li className="">
               <a
-                className="block p-2 cursor-pointer text-xl mx-3 rounded-sm hover:bg-secondary flex items-center gap-3"
+                className="p-2 cursor-pointer text-xl mx-3 rounded-sm hover:bg-secondary flex items-center gap-3"
                 onClick={logoutHandler}
               >
                 <MdLogout />

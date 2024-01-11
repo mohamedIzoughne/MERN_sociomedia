@@ -1,4 +1,4 @@
-import React, { FormEvent, useContext, useRef, useState } from "react"
+import React, { FormEvent, useContext, useRef } from "react"
 import { BsTwitter, BsLinkedin } from "react-icons/bs"
 import { FaEdit } from "react-icons/fa"
 import { socialType } from "../pages/Home"
@@ -18,7 +18,7 @@ type propsType = {
         [key: string]: string
       }
     | undefined
-  updateUser: () => void
+  updateUser?: () => void
 }
 
 const socialMedia: socialMediaType = {
@@ -34,14 +34,14 @@ const EditSocialProfile: React.FC<propsType> = ({
   updateUser,
 }) => {
   const { sendData } = useHttp()
-  const accountInputRef = useRef()
+  const accountInputRef = useRef<HTMLInputElement | null>(null)
   const { token } = useContext(context)
   const initialAccount = profiles && profiles[profile]
 
   const formSubmitHandler = (e: FormEvent) => {
     e.preventDefault()
     onToggle()
-    const account = accountInputRef.current.value
+    const account = accountInputRef?.current?.value
     let platform
     switch (profile) {
       case "twitter":
@@ -62,11 +62,11 @@ const EditSocialProfile: React.FC<propsType> = ({
         Authorization: "Bearer " + token,
       },
     }
-    if (isReadOnly || account.trim() === "" || account === initialAccount)
+    if (isReadOnly || account?.trim() === "" || account === initialAccount)
       return
 
-    sendData("profile/post-account", options, (res) => {
-      updateUser()
+    sendData("profile/post-account", options, () => {
+      if (updateUser) updateUser()
     })
   }
 

@@ -7,13 +7,13 @@ import { context } from "../store/context.tsx"
 const EditProfile: React.FC<{
   onClick: () => void
   user?: userType
-  updateUser: () => void
+  updateUser?: () => void
 }> = ({ onClick: clickHandler, user, updateUser }) => {
-  const imageInputRef = useRef<HTMLInputElement>(null)
-  const fullNameInputRef = useRef<HTMLInputElement>(null)
-  const emailInputRef = useRef()
-  const locationInputRef = useRef()
-  const jobInputRef = useRef()
+  const imageInputRef = useRef<HTMLInputElement | null>(null)
+  const fullNameInputRef = useRef<HTMLInputElement | null>(null)
+  const emailInputRef = useRef<HTMLInputElement | null>(null)
+  const locationInputRef = useRef<HTMLInputElement | null>(null)
+  const jobInputRef = useRef<HTMLInputElement | null>(null)
   const { sendData } = useHttp()
   const { token } = useContext(context)
 
@@ -22,10 +22,10 @@ const EditProfile: React.FC<{
     clickHandler()
 
     const userInfo = {
-      fullName: fullNameInputRef?.current?.value?.trim(),
-      email: emailInputRef?.current?.value?.trim(),
-      location: locationInputRef?.current?.value?.trim(),
-      work: jobInputRef?.current?.value?.trim(),
+      fullName: fullNameInputRef?.current?.value?.trim() || "",
+      email: emailInputRef?.current?.value?.trim() || "",
+      location: locationInputRef?.current?.value?.trim() || "",
+      work: jobInputRef?.current?.value?.trim() || "",
     }
 
     const form = new FormData()
@@ -33,8 +33,8 @@ const EditProfile: React.FC<{
     for (key in userInfo) {
       form.append(key, userInfo[key])
     }
-    if (imageInputRef.current?.files[0]) {
-      form.append("image", imageInputRef.current?.files[0])
+    if (imageInputRef?.current?.files) {
+      form.append("image", imageInputRef?.current?.files[0])
     }
 
     const options = {
@@ -46,7 +46,7 @@ const EditProfile: React.FC<{
     }
 
     sendData("profile/edit-profile", options, () => {
-      updateUser()
+      if (updateUser) updateUser()
     })
   }
 
