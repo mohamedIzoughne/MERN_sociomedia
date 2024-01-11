@@ -73,3 +73,5 @@ app.use((error, req, res, next) => {
 mongoose.connect(process.env.MONGO_URI).then(() => {
   app.listen(process.env.PORT || 3000)
 })
+
+module.exports = app
