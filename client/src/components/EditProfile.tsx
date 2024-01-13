@@ -62,7 +62,9 @@ const EditProfile: React.FC<{
         >
           <img
             src={`${
-              (import.meta.env.VITE_SERVER_API || "") + (user?.imageUrl || "")
+              import.meta.env.VITE_SERVER_API
+                ? import.meta.env.VITE_SERVER_API + (user?.imageUrl || "")
+                : ""
             } `}
             alt=""
           />

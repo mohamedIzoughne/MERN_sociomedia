@@ -5,7 +5,9 @@ const jwt = require("jsonwebtoken")
 
 exports.postSignUp = async (req, res, next) => {
   const { fullName, location, email, password, work } = req.body
-  let imageUrl = path.join("..", "images", "default-user-avatar.png")
+  let imageUrl = path.join("images", "default-user-avatar.png")
+
+  console.log(imageUrl)
 
   if (req.file) {
     imageUrl = req.file.path

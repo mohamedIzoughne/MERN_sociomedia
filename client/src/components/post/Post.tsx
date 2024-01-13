@@ -74,8 +74,11 @@ const Post: React.FC<propsType> = ({
         <div className="image w-14 h-14 overflow-hidden rounded-full">
           <img
             src={`${
-              (process.env.SERVER_API || "") + (post.creator.imageUrl || "")
-            }`}
+              import.meta.env.VITE_SERVER_API
+                ? import.meta.env.VITE_SERVER_API +
+                  (post.creator.imageUrl || "")
+                : ""
+            } `}
             alt=""
           />
         </div>

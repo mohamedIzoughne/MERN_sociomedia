@@ -8,6 +8,7 @@ const feedRoutes = require("./routes/feed")
 const userRoutes = require("./routes/profile")
 const User = require("./models/user")
 const multer = require("multer")
+require("dotenv").config()
 
 const fileStorage = multer.diskStorage({
   destination: (req, file, cb) => {

@@ -31,7 +31,11 @@ const UserInfo: React.FC<{
         <Link className="flex items-center" to={`/user/${user?._id}`}>
           <div className="image-holder w-14 h-14 overflow-hidden rounded-full">
             <img
-              src={`${(process.env.SERVER_API || "") + (user?.imageUrl || "")}`}
+              src={`${
+                import.meta.env.VITE_SERVER_API
+                  ? import.meta.env.VITE_SERVER_API + (user?.imageUrl || "")
+                  : ""
+              } `}
               alt=""
             />
           </div>
@@ -89,7 +93,7 @@ const UserInfo: React.FC<{
                 <small className="text-gray-400">Social platform</small>
               </a>
             </div>
-            <BiSolidEditAlt className="ml-auto" />
+            {!isSettingsHidden && <BiSolidEditAlt className="ml-auto" />}
           </li>
           <li className="linkedIn flex pb-3 items-center">
             <div className="logo">
@@ -104,7 +108,7 @@ const UserInfo: React.FC<{
                 <small className="text-gray-400">Social platform</small>
               </a>
             </div>
-            <BiSolidEditAlt className="ml-auto" />
+            {!isSettingsHidden && <BiSolidEditAlt className="ml-auto" />}
           </li>
         </ul>
       </div>

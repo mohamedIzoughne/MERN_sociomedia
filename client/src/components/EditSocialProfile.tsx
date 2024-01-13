@@ -90,7 +90,7 @@ const EditSocialProfile: React.FC<propsType> = ({
               id=""
               className="border 
             border-[#c2c2c2ab] text-[#3F3F3F] cursor-pointer"
-              placeholder={profile + ".com"}
+              placeholder={(profiles && profiles[profile]) || profile + ".com"}
               readOnly
             />
           ) : (

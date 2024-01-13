@@ -10,6 +10,7 @@ import EditProfile from "../components/EditProfile"
 import Overlay from "../UI/Overlay"
 import EditSocialProfile from "../components/EditSocialProfile"
 import { socialType } from "./Home"
+import ReactDOM from "react-dom"
 
 const UserPage = () => {
   const [user, setUser] = useState<userType>()
@@ -68,23 +69,27 @@ const UserPage = () => {
     <>
       <MainNavigation />
       <section className="container flex justify-between pt-3 items-start gap-3">
-        {editProfile && (
-          <>
-            <Overlay onClick={toggleEditPopup} />
-            <EditProfile user={user} onClick={toggleEditPopup} />
-          </>
-        )}
-        {isEditSocial && (
-          <>
-            <Overlay onClick={toggleSocialEdit} />
-            <EditSocialProfile
-              profiles={user?.socialProfiles}
-              isReadOnly={true}
-              profile={profile}
-              onToggle={toggleSocialEdit}
-            />
-          </>
-        )}
+        {editProfile &&
+          ReactDOM.createPortal(
+            <>
+              <Overlay onClick={toggleEditPopup} />
+              <EditProfile user={user} onClick={toggleEditPopup} />
+            </>,
+            document.getElementById("modals")!
+          )}
+        {isEditSocial &&
+          ReactDOM.createPortal(
+            <>
+              <Overlay onClick={toggleSocialEdit} />
+              <EditSocialProfile
+                profiles={user?.socialProfiles}
+                isReadOnly={true}
+                profile={profile}
+                onToggle={toggleSocialEdit}
+              />
+            </>,
+            document.getElementById("modals")!
+          )}
         <UserInfo
           user={user}
           onDetails={toggleEditPopup}

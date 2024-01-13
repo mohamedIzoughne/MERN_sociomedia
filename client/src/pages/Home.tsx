@@ -9,6 +9,7 @@ import { userType, postsType, friendType } from "../App"
 import EditProfile from "../components/EditProfile"
 import Overlay from "../UI/Overlay"
 import EditSocialProfile from "../components/EditSocialProfile"
+import ReactDOM from "react-dom"
 
 export type socialType = "twitter" | "linkedin" | ""
 
@@ -72,29 +73,33 @@ const Home = () => {
   return (
     <>
       <MainNavigation />
-      {editProfile && (
-        <>
-          <Overlay onClick={toggleEditPopup} />
-          <EditProfile
-            updateUser={updateUser}
-            user={user}
-            onClick={toggleEditPopup}
-          />
-        </>
-      )}
+      {editProfile &&
+        ReactDOM.createPortal(
+          <>
+            <Overlay onClick={toggleEditPopup} />
+            <EditProfile
+              updateUser={updateUser}
+              user={user}
+              onClick={toggleEditPopup}
+            />
+          </>,
+          document.getElementById("modals")!
+        )}
 
-      {isEditSocial && (
-        <>
-          <Overlay onClick={toggleSocialEdit} />
-          <EditSocialProfile
-            updateUser={updateUser}
-            profiles={user?.socialProfiles}
-            isReadOnly={false}
-            profile={profile}
-            onToggle={toggleSocialEdit}
-          />
-        </>
-      )}
+      {isEditSocial &&
+        ReactDOM.createPortal(
+          <>
+            <Overlay onClick={toggleSocialEdit} />
+            <EditSocialProfile
+              updateUser={updateUser}
+              profiles={user?.socialProfiles}
+              isReadOnly={false}
+              profile={profile}
+              onToggle={toggleSocialEdit}
+            />
+          </>,
+          document.getElementById("modals")!
+        )}
       <main className="container home-page flex justify-between pt-3 items-start gap-3">
         <UserInfo
           // isSettingsHidden={false}
