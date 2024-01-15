@@ -1,6 +1,7 @@
-const jwt = require("jsonwebtoken")
+// const jwt = require("jsonwebtoken")
+import jwt from "jsonwebtoken"
 
-module.exports = (req, res, next) => {
+export default (req, res, next) => {
   const authHeader = req.get("Authorization")
 
   if (!authHeader) {
@@ -8,18 +9,17 @@ module.exports = (req, res, next) => {
     error.statusCode = 401
     throw error
   }
-  // to get a header value
   const token = authHeader.split(" ")[1]
   let decodedToken
   try {
-    decodedToken = jwt.verify(token, "someSuperSuperSecretKey") // verify + check if it's valid
+    decodedToken = jwt.verify(token, "someSuperSuperSecretKey") // verify + check if it's valid:
+    // Question: someSuperSuperSecretKey is arbitrary, what should i use instead?
   } catch (err) {
     err.statusCode = 500
     throw err
   }
 
   if (!decodedToken) {
-    // not able to verify the token
     const error = new Error("not authenticated")
     error.statusCode = 401
     throw error

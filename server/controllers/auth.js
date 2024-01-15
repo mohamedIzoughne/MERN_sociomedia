@@ -1,9 +1,9 @@
-const path = require("path")
-const User = require("../models/user")
-const bcrypt = require("bcryptjs")
-const jwt = require("jsonwebtoken")
+import path from "path"
+import User from "../models/user.js"
+import bcrypt from "bcryptjs"
+import jwt from "jsonwebtoken"
 
-exports.postSignUp = async (req, res, next) => {
+const postSignUp = async (req, res, next) => {
   const { fullName, location, email, password, work } = req.body
   let imageUrl = path.join("images", "default-user-avatar.png")
 
@@ -49,7 +49,7 @@ exports.postSignUp = async (req, res, next) => {
   }
 }
 
-exports.postLogin = async (req, res, next) => {
+const postLogin = async (req, res, next) => {
   const { email, password } = req.body
 
   try {
@@ -79,37 +79,14 @@ exports.postLogin = async (req, res, next) => {
     res
       .status(202)
       .json({ token: token, userId: user._id.toString(), expirationDate })
+    return
   } catch (error) {
+    if (!error.statusCode) {
+      error.statusCode = 500
+    }
     next(error)
+    return error
   }
-
-  // User.findOne({ email })
-  //   .then((user) => {
-  //     loadedUser = user
-  //     if (!user) {
-  //       const error = new Error('There is no user with this email')
-  //       error.statusCode = 401
-  //       throw error
-  //     }
-
-  //     return bcrypt.compare(password, user.password)
-  //   })
-  //   .then((doMatch) => {
-  //     if (!doMatch) {
-  //       const error = new Error('Password is incorrect')
-  //       error.statusCode = 401
-  //       throw error
-  //     }
-  //     const token = jwt.sign(
-  //       { email: loadedUser.email, password: loadedUser.password, userId: loadedUser._id.toString() },
-  //       'someSuperSuperSecretKey',
-  //       { expiresIn: '1h' }
-  //     )
-  //       req.userId = loadedUser.userId
-  //       const expirationDate = new Date(Date.now() + 3600000)
-  //     res.status(202).json({ token: token, userId: loadedUser._id.toString(), expirationDate })
-  //   })
-  //   .catch((error) => {
-  //     next(error)
-  //   })
 }
+
+export default { postSignUp, postLogin }

@@ -1,12 +1,9 @@
-const mongoose = require("mongoose")
+import mongoose from "mongoose"
 
 const userSchema = mongoose.Schema({
   fullName: {
     type: String,
     required: true,
-  },
-  profileImageUrl: {
-    type: String,
   },
   email: {
     type: String,
@@ -82,4 +79,4 @@ userSchema.methods.deletePost = function (postId) {
   return this.save()
 }
 
-module.exports = mongoose.model("User", userSchema)
+export default mongoose.model("User", userSchema)
