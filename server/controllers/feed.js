@@ -1,7 +1,7 @@
-const Post = require("../models/post")
-const User = require("../models/user")
+import Post from "../models/post.js"
+import User from "../models/user.js"
 
-exports.createPost = async (req, res, next) => {
+export async function createPost(req, res, next) {
   const { content } = req.body
 
   let imageUrl
@@ -35,7 +35,7 @@ exports.createPost = async (req, res, next) => {
   }
 }
 
-exports.getPosts = (req, res, next) => {
+export function getPosts(req, res, next) {
   const currentPage = req.query.page || 1
   const perPage = 10
   let totalItems
@@ -63,7 +63,7 @@ exports.getPosts = (req, res, next) => {
     .catch((err) => next(err))
 }
 
-exports.getUserPosts = async (req, res, next) => {
+export async function getUserPosts(req, res, next) {
   const { userId } = req.params
 
   try {
@@ -74,7 +74,7 @@ exports.getUserPosts = async (req, res, next) => {
   }
 }
 
-exports.deletePost = async (req, res, next) => {
+export async function deletePost(req, res, next) {
   const postId = req.params.postId
   const { userId } = req
   // should i check if post exists first
@@ -99,7 +99,7 @@ exports.deletePost = async (req, res, next) => {
   }
 }
 
-exports.updatePost = async (req, res, next) => {
+export async function updatePost(req, res, next) {
   const postId = req.params.postId
   const updatedContent = req.body.newContent
 
@@ -122,7 +122,7 @@ exports.updatePost = async (req, res, next) => {
   }
 }
 
-exports.updateLikes = async (req, res, next) => {
+export async function updateLikes(req, res, next) {
   const postId = req.params.postId
   const { action } = req.body
   try {
@@ -138,7 +138,7 @@ exports.updateLikes = async (req, res, next) => {
   }
 }
 
-exports.putAddComment = async (req, res, next) => {
+export async function putAddComment(req, res, next) {
   const postId = req.params.postId
   const content = req.body.comment
 

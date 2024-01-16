@@ -1,6 +1,6 @@
-const mongoose = require("mongoose")
+import { Schema, Types, model } from "mongoose"
 
-const postSchema = mongoose.Schema(
+const postSchema = Schema(
   {
     content: {
       type: String,
@@ -12,7 +12,7 @@ const postSchema = mongoose.Schema(
     creator: {
       type: {
         id: {
-          type: mongoose.Types.ObjectId,
+          type: Types.ObjectId,
           ref: "User",
         },
         name: {
@@ -36,7 +36,7 @@ const postSchema = mongoose.Schema(
         {
           content: String,
           creatorId: {
-            type: mongoose.Types.ObjectId,
+            type: Types.ObjectId,
             ref: "User",
             required: true,
           },
@@ -68,4 +68,4 @@ postSchema.methods.addComment = function (comment) {
   return this.save()
 }
 
-module.exports = mongoose.model("Post", postSchema)
+export default model("Post", postSchema)

@@ -1,16 +1,20 @@
-const express = require("express")
-const path = require("path")
-const bodyParser = require("body-parser")
-const mongoose = require("mongoose")
+import express from "express"
+import { join, dirname } from "path"
+import bodyParser from "body-parser"
+import { connect } from "mongoose"
 const app = express()
-const authRoutes = require("./routes/auth")
-const feedRoutes = require("./routes/feed")
-const userRoutes = require("./routes/profile")
-const User = require("./models/user")
-const multer = require("multer")
-require("dotenv").config()
+import authRoutes from "./routes/auth.js"
+import feedRoutes from "./routes/feed.js"
+import userRoutes from "./routes/profile.js"
+import User from "./models/user.js"
+import multer, { diskStorage } from "multer"
+import { fileURLToPath } from "url"
+import dotenv from "dotenv"
+dotenv.config()
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = dirname(__filename)
 
-const fileStorage = multer.diskStorage({
+const fileStorage = diskStorage({
   destination: (req, file, cb) => {
     cb(null, "images")
   },
@@ -35,7 +39,7 @@ const fileFilter = (req, file, cb) => {
 }
 
 app.use(bodyParser.json())
-app.use("/images", express.static(path.join(__dirname, "images")))
+app.use("/images", express.static(join(__dirname, "images")))
 app.use(multer({ storage: fileStorage, fileFilter }).single("image"))
 
 app.use((req, res, next) => {
@@ -71,8 +75,8 @@ app.use((error, req, res, next) => {
   return res.status(status).json({ message })
 })
 
-mongoose.connect(process.env.MONGO_URI).then(() => {
+connect(process.env.MONGO_URI).then(() => {
   app.listen(process.env.PORT || 3000)
 })
 
-module.exports = app
+export default app

@@ -3,7 +3,7 @@ import User from "../models/user.js"
 import bcrypt from "bcryptjs"
 import jwt from "jsonwebtoken"
 
-const postSignUp = async (req, res, next) => {
+export const postSignUp = async (req, res, next) => {
   const { fullName, location, email, password, work } = req.body
   let imageUrl = path.join("images", "default-user-avatar.png")
 
@@ -49,7 +49,7 @@ const postSignUp = async (req, res, next) => {
   }
 }
 
-const postLogin = async (req, res, next) => {
+export const postLogin = async (req, res, next) => {
   const { email, password } = req.body
 
   try {
@@ -89,4 +89,4 @@ const postLogin = async (req, res, next) => {
   }
 }
 
-export default { postSignUp, postLogin }
+// export default { postSignUp, postLogin }

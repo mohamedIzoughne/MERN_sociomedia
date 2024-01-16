@@ -1,18 +1,25 @@
-const express = require("express")
-const router = express.Router()
-const profileController = require("../controllers/profile")
-const isAuth = require("../middleware/is-auth")
+import { Router } from "express"
+const router = Router()
+import {
+  getProfile,
+  putAddFriend,
+  deleteFriend,
+  getFriends,
+  postAccount,
+  editProfile,
+} from "../controllers/profile.js"
+import isAuth from "../middleware/is-auth.js"
 
-router.get("/:userId", isAuth, profileController.getProfile)
+router.get("/:userId", isAuth, getProfile)
 
-router.put("/add-friend", isAuth, profileController.putAddFriend)
+router.put("/add-friend", isAuth, putAddFriend)
 
-router.put("/remove-friend", isAuth, profileController.deleteFriend)
+router.put("/remove-friend", isAuth, deleteFriend)
 
-router.get("/friends", isAuth, profileController.getFriends)
+router.get("/friends", isAuth, getFriends)
 
-router.post("/post-account", isAuth, profileController.postAccount)
+router.post("/post-account", isAuth, postAccount)
 
-router.post("/edit-profile", isAuth, profileController.editProfile)
+router.post("/edit-profile", isAuth, editProfile)
 
-module.exports = router
+export default router

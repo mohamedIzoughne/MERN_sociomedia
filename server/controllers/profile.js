@@ -1,6 +1,6 @@
-const User = require("../models/user")
+import User from "../models/user.js"
 
-exports.getProfile = async (req, res, next) => {
+export async function getProfile(req, res, next) {
   const userId = req.params.userId
 
   try {
@@ -16,7 +16,7 @@ exports.getProfile = async (req, res, next) => {
   }
 }
 
-exports.putAddFriend = async (req, res, next) => {
+export async function putAddFriend(req, res, next) {
   const friendId = req.body.friendId
 
   try {
@@ -66,7 +66,7 @@ exports.putAddFriend = async (req, res, next) => {
   }
 }
 
-exports.deleteFriend = (req, res, next) => {
+export function deleteFriend(req, res, next) {
   const friendId = req.body.friendId
   let updatedFriends
   User.findById(req.userId).then((user) => {
@@ -106,7 +106,7 @@ exports.deleteFriend = (req, res, next) => {
   })
 }
 
-exports.getFriends = (req, res, next) => {
+export function getFriends(req, res, next) {
   // it's more performant to put friends information without populating
   // const friends = req.user.friends
   return User.findById(req.userId)
@@ -129,7 +129,7 @@ exports.getFriends = (req, res, next) => {
     })
 }
 
-exports.postAccount = (req, res, next) => {
+export function postAccount(req, res, next) {
   const { userId } = req
   const { platform } = req.body
 
@@ -148,7 +148,7 @@ exports.postAccount = (req, res, next) => {
     .catch((err) => next(err))
 }
 
-exports.editProfile = (req, res, next) => {
+export function editProfile(req, res, next) {
   const { fullName, email, location, work } = req.body
   let imageUrl
   if (req.file) {
