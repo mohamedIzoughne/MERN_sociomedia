@@ -102,7 +102,7 @@ const Home = () => {
         )}
       <main className="container home-page flex justify-between pt-3 items-start gap-3">
         <UserInfo
-          // isSettingsHidden={false}
+          isHimself={true}
           user={user}
           onDetails={toggleEditPopup}
           onSocial={toggleSocialEdit}
@@ -116,11 +116,6 @@ const Home = () => {
         />
         <FriendList friends={friends || []} updateUser={updateUser} />
       </main>
-      {/* <footer className="w-full h-16 rounded-t-lg bg-[#6cb6fe] fixed bottom-0 left-0 flex sm:hidden justify-center">
-        <button className="text-[5rem] text-[#10425d] absolute transform -translate-y-1/3 ">
-          <IoAddCircle />
-        </button>
-      </footer> */}
     </>
   )
 }

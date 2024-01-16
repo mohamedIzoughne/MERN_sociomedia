@@ -46,7 +46,7 @@ const EditProfile: React.FC<{
     }
 
     sendData("profile/edit-profile", options, () => {
-      if (updateUser) updateUser()
+      updateUser!()
     })
   }
 

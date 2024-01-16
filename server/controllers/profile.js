@@ -1,4 +1,5 @@
 import User from "../models/user.js"
+import Post from "../models/post.js"
 
 export async function getProfile(req, res, next) {
   const userId = req.params.userId
@@ -168,7 +169,22 @@ export function editProfile(req, res, next) {
         if (userInfo[key]) user[key] = userInfo[key]
       }
 
-      return user.save()
+      user.save()
+    })
+    .then(() => {
+      Post.find({ "creator.id": req.userId }).then((posts) => {
+        posts.forEach(async (post) => {
+          const newCreator = { imageUrl, location, name: fullName }
+          for (const key in newCreator) {
+            if (newCreator[key]) {
+              for (let i = 0; i < posts.length; i++) {
+                post.creator[key] = newCreator[key]
+              }
+              await post.save()
+            }
+          }
+        })
+      })
     })
     .catch((err) => next(err))
 }

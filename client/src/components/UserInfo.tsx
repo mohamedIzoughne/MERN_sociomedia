@@ -8,11 +8,11 @@ import { userType } from "../App"
 
 const UserInfo: React.FC<{
   user?: userType
-  isSettingsHidden?: boolean
+  isHimself?: boolean
   onDetails: () => void
   onSocial: () => void
   onSetProfile: (profile: socialType) => void
-}> = ({ user, onDetails, onSocial, onSetProfile, isSettingsHidden }) => {
+}> = ({ user, onDetails, onSocial, onSetProfile, isHimself }) => {
   const { pathname: path } = useLocation()
   const classes = `bg-white p-3 rounded-md ${
     path === "/" && " w-1/4 hidden flex-grow md:block lg:flex-grow-0"
@@ -46,7 +46,7 @@ const UserInfo: React.FC<{
             </small>
           </div>
         </Link>
-        {!isSettingsHidden && (
+        {isHimself && (
           <button
             className="settings-icon ml-auto cursor-pointer"
             onClick={onDetails}
@@ -93,7 +93,7 @@ const UserInfo: React.FC<{
                 <small className="text-gray-400">Social platform</small>
               </a>
             </div>
-            {!isSettingsHidden && <BiSolidEditAlt className="ml-auto" />}
+            {isHimself && <BiSolidEditAlt className="ml-auto" />}
           </li>
           <li className="linkedIn flex pb-3 items-center">
             <div className="logo">
@@ -108,7 +108,7 @@ const UserInfo: React.FC<{
                 <small className="text-gray-400">Social platform</small>
               </a>
             </div>
-            {!isSettingsHidden && <BiSolidEditAlt className="ml-auto" />}
+            {isHimself && <BiSolidEditAlt className="ml-auto" />}
           </li>
         </ul>
       </div>

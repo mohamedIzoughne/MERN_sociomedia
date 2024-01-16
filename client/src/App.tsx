@@ -66,7 +66,7 @@ function App() {
         }
       />
       <Route
-        path="/user/:userId"
+        path="/user/:targetId"
         element={
           <ProtectedRoute>
             <UserPage />

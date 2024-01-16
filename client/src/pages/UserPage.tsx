@@ -17,11 +17,11 @@ const UserPage = () => {
   const { token, userId } = useContext(context)
   const { sendData } = useHttp()
   const [posts, setPosts] = useState<postsType>([])
-  const { userId: targetId } = useParams()
+  const { targetId } = useParams()
   const [isEditSocial, setIsEditSocial] = useState<boolean>(false)
   const [editProfile, setEditProfile] = useState<boolean>(false)
   const [profile, setProfile] = useState<socialType>("")
-  const isUser = userId !== targetId
+  const isHimself = userId === targetId
 
   const updatePosts = useCallback(() => {
     const options = {
@@ -83,7 +83,7 @@ const UserPage = () => {
               <Overlay onClick={toggleSocialEdit} />
               <EditSocialProfile
                 profiles={user?.socialProfiles}
-                isReadOnly={true}
+                isReadOnly={!isHimself}
                 profile={profile}
                 onToggle={toggleSocialEdit}
               />
@@ -95,7 +95,7 @@ const UserPage = () => {
           onDetails={toggleEditPopup}
           onSocial={toggleSocialEdit}
           onSetProfile={profileHandler}
-          isSettingsHidden={isUser}
+          isHimself={isHimself}
         />
         <Posts posts={posts} />
       </section>
