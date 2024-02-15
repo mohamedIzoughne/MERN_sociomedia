@@ -42,7 +42,9 @@ app.use(bodyParser.json())
 app.use("/images", express.static(join(__dirname, "images")))
 app.use(multer({ storage: fileStorage, fileFilter }).single("image"))
 
+// set headers
 app.use((req, res, next) => {
+  // cors
   res.setHeader("Access-Control-Allow-Origin", "*")
   res.setHeader(
     "Access-Control-Allow-Methods",
@@ -50,6 +52,8 @@ app.use((req, res, next) => {
     "OPTIONS"
   )
   res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization")
+  // caching
+  res.setHeader("Cache-Control", "s-max-age=1, stale-while-revalidate")
   next()
 })
 
