@@ -1,17 +1,17 @@
-import UserInfo from "../components/UserInfo"
-import FriendList from "../components/FriendList"
-import Posts from "../components/post/Posts"
-import MainNavigation from "../components/MainNavigation"
-import { useState, useContext, useEffect, useCallback } from "react"
-import useHttp from "../hooks/use-http"
-import { context } from "../store/context"
-import { userType, postsType, friendType } from "../App"
-import EditProfile from "../components/EditProfile"
-import Overlay from "../UI/Overlay"
-import EditSocialProfile from "../components/EditSocialProfile"
-import ReactDOM from "react-dom"
+import UserInfo from '../components/UserInfo'
+import FriendList from '../components/FriendList'
+import Posts from '../components/post/Posts'
+import MainNavigation from '../components/MainNavigation'
+import { useState, useContext, useEffect, useCallback } from 'react'
+import useHttp from '../hooks/use-http'
+import { context } from '../store/context'
+import { userType, postsType, friendType } from '../App'
+import EditProfile from '../components/EditProfile'
+import Overlay from '../UI/Overlay'
+import EditSocialProfile from '../components/EditSocialProfile'
+import ReactDOM from 'react-dom'
 
-export type socialType = "twitter" | "linkedin" | ""
+export type socialType = 'twitter' | 'linkedin' | ''
 
 const Home = () => {
   const [user, setUser] = useState<userType>()
@@ -21,12 +21,12 @@ const Home = () => {
   const [friends, setFriends] = useState<friendType[] | []>([])
   const [editProfile, setEditProfile] = useState<boolean>(false)
   const [isEditSocial, setIsEditSocial] = useState<boolean>(false)
-  const [profile, setProfile] = useState<socialType>("")
+  const [profile, setProfile] = useState<socialType>('')
 
   const updatePosts = useCallback(() => {
     const options = {
       headers: {
-        Authorization: "Bearer " + token,
+        Authorization: 'Bearer ' + token,
       },
     }
 
@@ -39,7 +39,7 @@ const Home = () => {
   const updateUser = useCallback(() => {
     const options = {
       headers: {
-        Authorization: "Bearer " + token,
+        Authorization: 'Bearer ' + token,
       },
     }
 
@@ -83,7 +83,7 @@ const Home = () => {
               onClick={toggleEditPopup}
             />
           </>,
-          document.getElementById("modals")!
+          document.getElementById('modals')!
         )}
 
       {isEditSocial &&
@@ -98,9 +98,9 @@ const Home = () => {
               onToggle={toggleSocialEdit}
             />
           </>,
-          document.getElementById("modals")!
+          document.getElementById('modals')!
         )}
-      <main className="container home-page flex justify-between pt-3 items-start gap-3">
+      <main className='container home-page flex justify-between pt-3 items-start gap-3'>
         <UserInfo
           isHimself={true}
           user={user}

@@ -10,7 +10,7 @@ type propsType = {
   updatePosts?: () => void
   updateUser?: () => void
   friends?: friendType[] | []
-  userPage: undefined | true
+  userPage?: true
 }
 
 const Posts: React.FC<propsType> = ({

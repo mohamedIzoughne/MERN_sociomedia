@@ -12,7 +12,7 @@ const UserInfo: React.FC<{
   onDetails: () => void
   onSocial: () => void
   onSetProfile: (profile: socialType) => void
-  userPage: true | undefined
+  userPage?: true
 }> = ({ user, onDetails, onSocial, onSetProfile, isHimself, userPage }) => {
   const classes = `bg-white p-3 rounded-md ${
     !userPage && ' w-1/4 hidden md:block lg:flex-grow-0'
