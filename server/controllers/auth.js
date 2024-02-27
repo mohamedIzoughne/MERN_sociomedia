@@ -1,11 +1,11 @@
-import path from "path"
-import User from "../models/user.js"
-import bcrypt from "bcryptjs"
-import jwt from "jsonwebtoken"
+import path from 'path'
+import User from '../models/user.js'
+import bcrypt from 'bcryptjs'
+import jwt from 'jsonwebtoken'
 
 export const postSignUp = async (req, res, next) => {
   const { fullName, location, email, password, work } = req.body
-  let imageUrl = path.join("images", "default-user-avatar.png")
+  let imageUrl = path.join('images', 'default-user-avatar.png')
 
   if (req.file) {
     imageUrl = req.file.path
@@ -14,7 +14,7 @@ export const postSignUp = async (req, res, next) => {
   try {
     const user = await User.findOne({ email })
     if (user) {
-      const error = new Error("This profile does already exist")
+      const error = new Error('This profile does already exist')
       error.statusCode = 302
       throw error
     }
@@ -32,8 +32,8 @@ export const postSignUp = async (req, res, next) => {
       password: hashedPassword,
       profileImageUrl: imageUrl,
       socialProfiles: {
-        twitter: "",
-        linkedIn: "",
+        twitter: '',
+        linkedIn: '',
       },
       friends: [],
       profileViews: 0,
@@ -41,7 +41,7 @@ export const postSignUp = async (req, res, next) => {
 
     await newUser.save()
 
-    await res.json({ data: newUser, message: "Signed up successfully" })
+    await res.json({ data: newUser, message: 'Signed up successfully' })
   } catch (error) {
     next(error)
   }
@@ -50,16 +50,17 @@ export const postSignUp = async (req, res, next) => {
 export const postLogin = async (req, res, next) => {
   const { email, password } = req.body
 
+  console.log(email)
   try {
     const user = await User.findOne({ email })
     if (!user) {
-      const error = new Error("There is no user with this email")
+      const error = new Error('There is no user with this email')
       error.statusCode = 401
       throw error
     }
     const doMatch = await bcrypt.compare(password, user.password)
     if (!doMatch) {
-      const error = new Error("Password is incorrect")
+      const error = new Error('Password is incorrect')
       error.statusCode = 401
       throw error
     }
@@ -69,8 +70,8 @@ export const postLogin = async (req, res, next) => {
         password: user.password,
         userId: user._id.toString(),
       },
-      "someSuperSuperSecretKey",
-      { expiresIn: "1h" }
+      'someSuperSuperSecretKey',
+      { expiresIn: '1h' }
     )
     req.userId = user.userId
     const expirationDate = new Date(Date.now() + 3600000)
