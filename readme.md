@@ -14,6 +14,7 @@
 - Do not accept friend directly without accepting: notification
 - I deal with likes as a map in server, but as an object in client? why? fix problem
 - add caching, use useMemo more, browser caching... other sorts of caching.
+- make a component for showing friends also for mobile
 
 ### more technical
 

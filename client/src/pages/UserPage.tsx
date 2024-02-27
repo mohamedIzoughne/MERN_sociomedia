@@ -1,16 +1,16 @@
-import UserInfo from "../components/UserInfo"
-import MainNavigation from "../components/MainNavigation"
-import Posts from "../components/post/Posts"
-import { useEffect, useState, useCallback, useContext } from "react"
-import useHttp from "../hooks/use-http"
-import { context } from "../store/context"
-import { useParams } from "react-router-dom"
-import { userType, postsType } from "../App"
-import EditProfile from "../components/EditProfile"
-import Overlay from "../UI/Overlay"
-import EditSocialProfile from "../components/EditSocialProfile"
-import { socialType } from "./Home"
-import ReactDOM from "react-dom"
+import UserInfo from '../components/UserInfo'
+import MainNavigation from '../components/MainNavigation'
+import Posts from '../components/post/Posts'
+import { useEffect, useState, useCallback, useContext } from 'react'
+import useHttp from '../hooks/use-http'
+import { context } from '../store/context'
+import { useParams } from 'react-router-dom'
+import { userType, postsType } from '../App'
+import EditProfile from '../components/EditProfile'
+import Overlay from '../UI/Overlay'
+import EditSocialProfile from '../components/EditSocialProfile'
+import { socialType } from './Home'
+import ReactDOM from 'react-dom'
 
 const UserPage = () => {
   const [user, setUser] = useState<userType>()
@@ -20,13 +20,13 @@ const UserPage = () => {
   const { targetId } = useParams()
   const [isEditSocial, setIsEditSocial] = useState<boolean>(false)
   const [editProfile, setEditProfile] = useState<boolean>(false)
-  const [profile, setProfile] = useState<socialType>("")
+  const [profile, setProfile] = useState<socialType>('')
   const isHimself = userId === targetId
 
   const updatePosts = useCallback(() => {
     const options = {
       headers: {
-        Authorization: "Bearer " + token,
+        Authorization: 'Bearer ' + token,
       },
     }
 
@@ -39,7 +39,7 @@ const UserPage = () => {
   useEffect(() => {
     const options = {
       headers: {
-        Authorization: "Bearer " + token,
+        Authorization: 'Bearer ' + token,
       },
     }
 
@@ -68,14 +68,14 @@ const UserPage = () => {
   return (
     <>
       <MainNavigation />
-      <section className="container flex justify-between pt-3 items-start gap-3">
+      <section className='container flex justify-between pt-3 items-start gap-3 flex-col sm:flex-row'>
         {editProfile &&
           ReactDOM.createPortal(
             <>
               <Overlay onClick={toggleEditPopup} />
               <EditProfile user={user} onClick={toggleEditPopup} />
             </>,
-            document.getElementById("modals")!
+            document.getElementById('modals')!
           )}
         {isEditSocial &&
           ReactDOM.createPortal(
@@ -88,16 +88,17 @@ const UserPage = () => {
                 onToggle={toggleSocialEdit}
               />
             </>,
-            document.getElementById("modals")!
+            document.getElementById('modals')!
           )}
         <UserInfo
+          userPage
           user={user}
           onDetails={toggleEditPopup}
           onSocial={toggleSocialEdit}
           onSetProfile={profileHandler}
           isHimself={isHimself}
         />
-        <Posts posts={posts} />
+        <Posts userPage posts={posts} />
       </section>
     </>
   )

@@ -1,16 +1,16 @@
-import PostPublish from "./PostPublish"
-import Post from "./Post"
-import { useLocation } from "react-router-dom"
-import useHttp from "../../hooks/use-http"
-import { useContext } from "react"
-import { context } from "../../store/context"
-import { friendType, postsType } from "../../App"
+import PostPublish from './PostPublish'
+import Post from './Post'
+import useHttp from '../../hooks/use-http'
+import { useContext } from 'react'
+import { context } from '../../store/context'
+import { friendType, postsType } from '../../App'
 
 type propsType = {
   posts: postsType
   updatePosts?: () => void
   updateUser?: () => void
   friends?: friendType[] | []
+  userPage: undefined | true
 }
 
 const Posts: React.FC<propsType> = ({
@@ -18,24 +18,24 @@ const Posts: React.FC<propsType> = ({
   updatePosts,
   updateUser,
   friends = [],
+  userPage,
 }) => {
   const { token } = useContext(context)
-  const { pathname: path } = useLocation()
   const { sendData } = useHttp()
 
   let addFriendHandler: (id: string) => void
-  if (path === "/") {
+  if (!userPage) {
     addFriendHandler = (friendId) => {
       const options = {
-        method: "PUT",
+        method: 'PUT',
         body: JSON.stringify({ friendId }),
         headers: {
-          "Content-Type": "application/json",
-          Authorization: "Bearer " + token,
+          'Content-Type': 'application/json',
+          Authorization: 'Bearer ' + token,
         },
       }
 
-      sendData("profile/add-friend", options, () => {
+      sendData('profile/add-friend', options, () => {
         updateUser!()
       })
     }
@@ -46,8 +46,8 @@ const Posts: React.FC<propsType> = ({
   }
 
   return (
-    <section className="flex-grow">
-      {path === "/" && <PostPublish updatePosts={updatePosts!} />}
+    <section className='flex-grow'>
+      {!userPage && <PostPublish updatePosts={updatePosts!} />}
       <ul>
         {posts.map((post) => {
           return (
