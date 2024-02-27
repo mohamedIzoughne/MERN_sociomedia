@@ -1,14 +1,14 @@
-import { useCallback, useState } from "react"
+import { useCallback, useState } from 'react'
 
 type optionsType = {
   method?: string
   body?: string | FormData
-  headers?: { "Content-Type"?: string; Authorization?: string }
+  headers?: { 'Content-Type'?: string; Authorization?: string }
 }
 
 const useHttp = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false)
-  const [errorMessage, setErrorMessage] = useState<string>("")
+  const [errorMessage, setErrorMessage] = useState<string>('')
 
   const sendData = useCallback(async function <responseType>(
     endpoint: string,
@@ -17,7 +17,8 @@ const useHttp = () => {
   ) {
     setIsLoading(true)
     try {
-      const url = (import.meta.env.VITE_SERVER_API || "") + endpoint
+      const url = (import.meta.env.VITE_SERVER_API || '') + endpoint
+      console.log(url)
       const response = await fetch(url, options)
       const data = await response.json()
       if (response.ok) {

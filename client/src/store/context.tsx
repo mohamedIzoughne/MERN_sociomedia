@@ -1,8 +1,8 @@
-import { createContext, useCallback, useEffect, useState } from "react"
-import useHttp from "../hooks/use-http"
-import { useNavigate } from "react-router-dom"
+import { createContext, useCallback, useEffect, useState } from 'react'
+import useHttp from '../hooks/use-http'
+import { useNavigate } from 'react-router-dom'
 
-type MODE_TYPE = "light" | "night"
+type MODE_TYPE = 'light' | 'night'
 
 type contextTypes = {
   userId: string
@@ -15,9 +15,9 @@ type contextTypes = {
 }
 
 const defaultContext: contextTypes = {
-  userId: "",
-  token: "",
-  mode: "light",
+  userId: '',
+  token: '',
+  mode: 'light',
   loginHandler: () => {},
   logoutHandler: () => {},
   switchMode: () => {},
@@ -36,26 +36,26 @@ export const context = createContext<contextTypes>(defaultContext)
 export const ContextProvider: React.FC<{ children: React.JSX.Element }> = ({
   children,
 }) => {
-  const isLoggedInStorage = window.localStorage.getItem("isLoggedIn")
-  const tokenInStorage = window.localStorage.getItem("token")
-  const userIdInStorage = window.localStorage.getItem("userId")
-  const expiresInDate = window.localStorage.getItem("expiresIn")
-  const [token, setToken] = useState<string>(tokenInStorage || "")
-  const [mode, setMode] = useState<MODE_TYPE>("light")
+  const isLoggedInStorage = window.localStorage.getItem('isLoggedIn')
+  const tokenInStorage = window.localStorage.getItem('token')
+  const userIdInStorage = window.localStorage.getItem('userId')
+  const expiresInDate = window.localStorage.getItem('expiresIn')
+  const [token, setToken] = useState<string>(tokenInStorage || '')
+  const [mode, setMode] = useState<MODE_TYPE>('light')
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(!!isLoggedInStorage)
-  const [userId, setUserId] = useState<string>(userIdInStorage || "")
+  const [userId, setUserId] = useState<string>(userIdInStorage || '')
   const navigate = useNavigate()
   const { sendData } = useHttp()
 
   const logoutHandler = () => {
-    localStorage.setItem("isLoggedIn", "")
-    localStorage.setItem("token", "")
-    localStorage.setItem("userId", "")
-    localStorage.setItem("expiresIn", "")
-    setToken("")
-    setUserId("")
+    localStorage.setItem('isLoggedIn', '')
+    localStorage.setItem('token', '')
+    localStorage.setItem('userId', '')
+    localStorage.setItem('expiresIn', '')
+    setToken('')
+    setUserId('')
     setIsLoggedIn(false)
-    navigate("/login")
+    navigate('/login')
   }
 
   const checkIfTimeExpired = useCallback(() => {
@@ -84,10 +84,10 @@ export const ContextProvider: React.FC<{ children: React.JSX.Element }> = ({
     userId: string,
     expirationDate: Date
   ): void => {
-    localStorage.setItem("isLoggedIn", "true")
-    localStorage.setItem("token", token)
-    localStorage.setItem("userId", userId)
-    localStorage.setItem("expiresIn", expirationDate.toString())
+    localStorage.setItem('isLoggedIn', 'true')
+    localStorage.setItem('token', token)
+    localStorage.setItem('userId', userId)
+    localStorage.setItem('expiresIn', expirationDate.toString())
     setToken(token)
     setUserId(userId)
     setIsLoggedIn(true)
@@ -98,8 +98,8 @@ export const ContextProvider: React.FC<{ children: React.JSX.Element }> = ({
 
   const modeHandler = (): void => {
     setMode((prevMode: MODE_TYPE) => {
-      if (prevMode === "light") return "night"
-      return "light"
+      if (prevMode === 'light') return 'night'
+      return 'light'
     })
   }
 
