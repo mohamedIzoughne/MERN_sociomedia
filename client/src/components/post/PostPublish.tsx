@@ -10,7 +10,7 @@ const PostPublish: React.FC<{ updatePosts: () => void }> = ({
   updatePosts,
 }) => {
   const [postContent, setPostContent] = useState<string | undefined>()
-  const [postImage, setPostImage] = useState<File>()
+  const [postImage, setPostImage] = useState<File | null>()
   const postInputRef = useRef<HTMLTextAreaElement>(null)
   const { sendData } = useHttp()
   const { token } = useContext(context)
@@ -23,7 +23,6 @@ const PostPublish: React.FC<{ updatePosts: () => void }> = ({
   const formSubmitHandler = (e: React.FormEvent) => {
     e.preventDefault()
     const content = postInputRef.current!.value
-
     const formData = new FormData()
 
     formData.append("content", content)
@@ -42,6 +41,7 @@ const PostPublish: React.FC<{ updatePosts: () => void }> = ({
     sendData<object>("feed/new-post", options, () => {
       updatePosts()
       setPostContent("")
+      setPostImage(null)
     })
   }
 

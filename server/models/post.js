@@ -28,8 +28,8 @@ const postSchema = Schema(
       required: true,
     },
     likes: {
-      type: Number,
-      default: 0,
+      type: Map,
+      default: {},
     },
     comments: {
       type: [
@@ -45,18 +45,24 @@ const postSchema = Schema(
         },
       ],
     },
+    likedByUser: {
+      type: Boolean,
+      default: false,
+    },
   },
   { timestamps: true }
 )
 
-postSchema.methods.likeIncrement = function () {
-  this.likes++
+postSchema.methods.likeIncrement = function (userId) {
+  if (!this.likes.get(userId)) {
+    this.likes.set(userId, userId)
+  }
 
   return this.save()
 }
 
-postSchema.methods.likeDecrement = function () {
-  this.likes--
+postSchema.methods.likeDecrement = function (userId) {
+  this.likes.delete(userId)
 
   return this.save()
 }

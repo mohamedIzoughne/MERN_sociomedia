@@ -54,6 +54,11 @@ export function getPosts(req, res, next) {
       //   const error = new Error('No posts found') // should it be an error?
       //   error.statusCode =
       // }
+      posts.forEach((post) => {
+        if (post.likes.get(req.userId)) {
+          post.likedByUser = true
+        }
+      })
       res.json({
         message: "getting posts succeeded",
         posts: posts.reverse(),
@@ -125,12 +130,13 @@ export async function updatePost(req, res, next) {
 export async function updateLikes(req, res, next) {
   const postId = req.params.postId
   const { action } = req.body
+
   try {
     const post = await Post.findById(postId)
     if (action === "increment") {
-      await post.likeIncrement()
+      await post.likeIncrement(req.userId)
     } else {
-      await post.likeDecrement()
+      await post.likeDecrement(req.userId)
     }
     await res.status(201).json({ message: "likes updated" })
   } catch (error) {
@@ -143,7 +149,6 @@ export async function putAddComment(req, res, next) {
   const content = req.body.comment
 
   try {
-    console.log("hello")
     const user = await User.findById(req.userId)
     const comment = {
       creatorId: req.userId,

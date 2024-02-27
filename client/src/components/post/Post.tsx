@@ -22,10 +22,10 @@ const Post: React.FC<propsType> = ({
 }) => {
   const { token, userId } = useContext(context)
   const { sendData } = useHttp()
-  const [postIsLiked, setPostIsLiked] = useState<boolean>(false)
+  const [postIsLiked, setPostIsLiked] = useState<boolean>(post.likedByUser)
   const [showComments, setShowComments] = useState(false)
   const [currentPost, setCurrentPost] = useState(post)
-
+  const [likes, setLikes] = useState<number>(Object.keys(post.likes).length)
   const friendHandler = (e: React.MouseEvent<HTMLButtonElement>) => {
     const friendId = e.currentTarget.dataset.creator_id
     if (friendId) addFriendHandler(friendId)
@@ -39,10 +39,10 @@ const Post: React.FC<propsType> = ({
     let action
     if (!postIsLiked) {
       action = "increment"
-      currentPost.likes++
+      setLikes((likes) => likes + 1)
     } else {
       action = "decrement"
-      currentPost.likes--
+      setLikes((likes) => likes - 1)
     }
     setPostIsLiked((prev) => !prev)
 
@@ -133,7 +133,7 @@ const Post: React.FC<propsType> = ({
             <AiOutlineLike />
           )}
         </button>
-        <small>{currentPost.likes}</small>
+        <small>{likes}</small>
         <button
           className="cursor-pointer ml-3"
           onClick={showHideCommentsHandler}

@@ -48,7 +48,8 @@ export type postType = {
     location: string
     imageUrl: string
   }
-  likes: number
+  likedByUser: boolean
+  likes: Map<string, string>
   comments: commentsType
 }
 
