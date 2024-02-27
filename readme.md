@@ -25,7 +25,7 @@
 - implement pagination
 - make the full name unique
 
-### Questions
+### Questions: search for
 
 how to implement search? is it only by looking at the letters or u
 
@@ -33,3 +33,4 @@ how to implement search? is it only by looking at the letters or u
 - sing some sort of AI? or some algorithm? is there any library?
 - read about oAuth
 - should I put the user object in the store(context or redux)
+- does really commits have to only include one job/task? because it's not practical
