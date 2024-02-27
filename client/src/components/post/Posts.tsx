@@ -46,7 +46,7 @@ const Posts: React.FC<propsType> = ({
   }
 
   return (
-    <section className='flex-grow'>
+    <section className={userPage ? 'flex-grow-2' : 'flex-grow'}>
       {!userPage && <PostPublish updatePosts={updatePosts!} />}
       <ul>
         {posts.map((post) => {

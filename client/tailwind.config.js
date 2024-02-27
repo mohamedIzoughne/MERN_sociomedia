@@ -13,6 +13,9 @@ export default {
         md: '992px',
         lg: '1200px',
       },
+      flexGrow: {
+        2: '2',
+      },
     },
   },
   plugins: [],

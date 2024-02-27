@@ -1,5 +1,5 @@
-import Post from "../models/post.js"
-import User from "../models/user.js"
+import Post from '../models/post.js'
+import User from '../models/user.js'
 
 export async function createPost(req, res, next) {
   const { content } = req.body
@@ -27,7 +27,7 @@ export async function createPost(req, res, next) {
     await post.save()
     await user.addPost(post._id)
     await res.status(201).json({
-      message: "Post created",
+      message: 'Post created',
       post: post,
     })
   } catch (error) {
@@ -60,7 +60,7 @@ export function getPosts(req, res, next) {
         }
       })
       res.json({
-        message: "getting posts succeeded",
+        message: 'getting posts succeeded',
         posts: posts.reverse(),
         totalItems,
       })
@@ -72,8 +72,13 @@ export async function getUserPosts(req, res, next) {
   const { userId } = req.params
 
   try {
-    const posts = await Post.find({ "creator.id": userId })
-    await res.json({ message: "Success", posts })
+    const posts = await Post.find({ 'creator.id': userId })
+    await posts.forEach((post) => {
+      if (post.likes.get(req.userId)) {
+        post.likedByUser = true
+      }
+    })
+    await res.json({ message: 'Success', posts: posts.reverse() })
   } catch (err) {
     next(err)
   }
@@ -86,19 +91,19 @@ export async function deletePost(req, res, next) {
   try {
     const post = await Post.findById(postId)
     if (!post) {
-      const error = new Error("Could not find post")
+      const error = new Error('Could not find post')
       error.statusCode = 404
       throw error
     }
     if (post.creatorId.toString() !== req.userId) {
-      const error = new Error("Not authorized")
+      const error = new Error('Not authorized')
       error.statusCode = 403
       throw error
     }
     await Post.deleteOne({ _id: postId })
     const user = await User.findById(userId)
     await user.deletePost(postId)
-    await res.json({ message: "post is deleted" })
+    await res.json({ message: 'post is deleted' })
   } catch (error) {
     next(error)
   }
@@ -111,17 +116,17 @@ export async function updatePost(req, res, next) {
   try {
     const post = await Post.findById(postId)
     if (!post) {
-      const error = new Error("Could not find post")
+      const error = new Error('Could not find post')
       error.statusCode = 404
       throw error
     } else if (post.creatorId.toString() !== req.userId) {
-      const error = new Error("Not authorized")
+      const error = new Error('Not authorized')
       error.statusCode = 403
       throw error
     }
     post.content = updatedContent
     await post.save()
-    await res.status(301).json({ message: "Post updated", post })
+    await res.status(301).json({ message: 'Post updated', post })
   } catch (error) {
     next(error)
   }
@@ -133,12 +138,12 @@ export async function updateLikes(req, res, next) {
 
   try {
     const post = await Post.findById(postId)
-    if (action === "increment") {
+    if (action === 'increment') {
       await post.likeIncrement(req.userId)
     } else {
       await post.likeDecrement(req.userId)
     }
-    await res.status(201).json({ message: "likes updated" })
+    await res.status(201).json({ message: 'likes updated' })
   } catch (error) {
     next(error)
   }
@@ -154,7 +159,7 @@ export async function putAddComment(req, res, next) {
       creatorId: req.userId,
       creatorName: user.fullName,
       content,
-      creatorImageUrl: "",
+      creatorImageUrl: '',
     }
     const post = await Post.findById(postId)
     const updatedPost = await post.addComment(comment)
