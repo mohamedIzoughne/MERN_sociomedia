@@ -23,6 +23,7 @@
 - think about wether graphQl is better instead of REST Api in this case
 - use typescript in the backend
 - implement pagination
+- make the full name unique
 
 ### Questions
 
