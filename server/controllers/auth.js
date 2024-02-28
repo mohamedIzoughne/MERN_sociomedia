@@ -50,7 +50,6 @@ export const postSignUp = async (req, res, next) => {
 export const postLogin = async (req, res, next) => {
   const { email, password } = req.body
 
-  console.log(email)
   try {
     const user = await User.findOne({ email })
     if (!user) {

@@ -18,7 +18,6 @@ const useHttp = () => {
     setIsLoading(true)
     try {
       const url = (import.meta.env.VITE_SERVER_API || '') + endpoint
-      console.log(url)
       const response = await fetch(url, options)
       const data = await response.json()
       if (response.ok) {

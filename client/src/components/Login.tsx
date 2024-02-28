@@ -1,14 +1,14 @@
-import { useContext } from "react"
-import { context } from "../store/context"
-import classes from "./Sign.module.css"
-import useInput from "../hooks/use-input"
-import { Link } from "react-router-dom"
-import useHttp from "../hooks/use-http"
-import { useNavigate } from "react-router-dom"
-import Loader from "../UI/Loader"
-import ErrorMessage from "../UI/ErrorMessage"
-import ReactDOM from "react-dom"
-import Overlay from "../UI/Overlay"
+import { useContext } from 'react'
+import { context } from '../store/context'
+import classes from './Sign.module.css'
+import useInput from '../hooks/use-input'
+import { Link } from 'react-router-dom'
+import useHttp from '../hooks/use-http'
+import { useNavigate } from 'react-router-dom'
+import Loader from '../UI/Loader'
+import ErrorMessage from '../UI/ErrorMessage'
+import ReactDOM from 'react-dom'
+import Overlay from '../UI/Overlay'
 
 type responseType = { token: string; userId: string; expirationDate: Date }
 
@@ -19,7 +19,7 @@ const Login = () => {
   const { sendData, isLoading, errorMessage, setErrorMessage } = useHttp()
 
   const toggleModal = () => {
-    setErrorMessage("")
+    setErrorMessage('')
   }
 
   const {
@@ -45,7 +45,7 @@ const Login = () => {
 
     if (!formIsValid) {
       toggleModal()
-      setErrorMessage("Form is not valid")
+      setErrorMessage('Form is not valid')
       return
     }
 
@@ -55,18 +55,18 @@ const Login = () => {
     }
 
     const options = {
-      method: "POST",
+      method: 'POST',
       body: JSON.stringify(userInfo),
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
     }
 
-    sendData<responseType>("auth/login", options, (response) => {
+    sendData<responseType>('auth/login', options, (response) => {
       const { token, userId, expirationDate } = response!
 
       ctx.loginHandler(token, userId, expirationDate)
-      navigate("/")
+      navigate('/')
     })
   }
 
@@ -76,25 +76,25 @@ const Login = () => {
         <b>Welcome for SocioMedia, The Social Media for Social people !</b>
       </p>
       <div className={emailClasses}>
-        <label htmlFor="email">Email</label>
+        <label htmlFor='email'>Email</label>
         <input
-          type="email"
-          id="email"
+          type='email'
+          id='email'
           onChange={emailChangeHandler}
           onBlur={emailBlurHandler}
         />
       </div>
       <div className={passwordClasses}>
-        <label htmlFor="password">Password</label>
+        <label htmlFor='password'>Password</label>
         <input
-          type="password"
-          id="password"
+          type='password'
+          id='password'
           onChange={passwordChangeHandler}
           onBlur={passwordBlurHandler}
         />
       </div>
-      <button type="submit">Login</button>
-      <Link to={"/signup"}>don't have an account ? sign up here</Link>
+      <button type='submit'>Login</button>
+      <Link to={'/signup'}>don't have an account ? sign up here</Link>
       {isLoading && <Loader />}
       {errorMessage &&
         ReactDOM.createPortal(
@@ -102,7 +102,7 @@ const Login = () => {
             <Overlay onClick={toggleModal} />
             <ErrorMessage message={errorMessage} toggleModal={toggleModal} />
           </>,
-          document.getElementById("modals")!
+          document.getElementById('modals')!
         )}
     </form>
   )
