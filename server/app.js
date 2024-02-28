@@ -10,6 +10,7 @@ import User from './models/user.js'
 import multer, { diskStorage } from 'multer'
 import { fileURLToPath } from 'url'
 import dotenv from 'dotenv'
+import cors from 'cors'
 dotenv.config()
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = dirname(__filename)
@@ -44,19 +45,20 @@ app.use(bodyParser.json())
 app.use('/images', express.static(join(__dirname, 'images')))
 app.use(multer({ storage: fileStorage, fileFilter }).single('image'))
 
+app.use(cors())
 // set headers
 app.use((req, res, next) => {
   // cors
-  res.setHeader('Access-Control-Allow-Credentials', true)
-  res.setHeader('Access-Control-Allow-Origin', '*')
-  res.setHeader(
-    'Access-Control-Allow-Methods',
-    'GET, POST, PUT, PATCH, DELETE, OPTIONS'
-  )
-  res.setHeader(
-    'Access-Control-Allow-Headers',
-    'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version'
-  )
+  // res.setHeader('Access-Control-Allow-Credentials', true)
+  // res.setHeader('Access-Control-Allow-Origin', '*')
+  // res.setHeader(
+  //   'Access-Control-Allow-Methods',
+  //   'GET, POST, PUT, PATCH, DELETE, OPTIONS'
+  // )
+  // res.setHeader(
+  //   'Access-Control-Allow-Headers',
+  //   'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version'
+  // )
   // caching
   res.setHeader('Cache-Control', 's-max-age=1, stale-while-revalidate')
   next()
