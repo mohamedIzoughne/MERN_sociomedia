@@ -17,7 +17,7 @@ type notificationCategoriesTypes = {
   [key: string]: string
 }
 
-const notificationCategories:notificationCategoriesTypes = {
+const notificationCategories: notificationCategoriesTypes = {
   like: 'liked your post',
   comment: 'commented on your post',
   invitation: 'invited you to be friends, do you accept ?',
@@ -322,7 +322,7 @@ const DesktopNav: React.FC<{ togglePublish: () => void }> = ({
           <ul className='flex bg-transparent py-3 pr-2 text-lg'>
             <NavItem onClick={togglePublish} icon={<MdAddCircleOutline />} />
             <NavItem
-              icon={isLightMode ? <MdDarkMode /> : <MdLightMode />}
+              icon={isLightMode ? <MdLightMode /> : <MdDarkMode />}
               onClick={switchMode}
             />
             <Link to='/friends'>
@@ -347,7 +347,7 @@ const MainNavigation = () => {
   useEffect(() => {
     const resizeHandler = () => {
       setWidth(window.innerWidth)
-    } 
+    }
 
     window.addEventListener('resize', resizeHandler)
     return () => {
