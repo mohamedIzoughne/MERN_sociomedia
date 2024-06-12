@@ -82,13 +82,13 @@ const MobileNav: React.FC<{ togglePublish: () => void }> = ({
               </h2>
             </Link>
           </div>
-          <div className='search mr-auto'>
+          {/* <div className='search mr-auto'>
             <input
               type='search'
               className='bg-secondary dark:bg-[#595959] p-1 pl-3 ml-2 outline-none rounded-sm hidden sm:block'
               placeholder='Search'
             />
-          </div>
+          </div> */}
           <NavItem onClick={togglePublish} icon={<MdAddCircleOutline />} />
           {navIsOpen && (
             <ul
