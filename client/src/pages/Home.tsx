@@ -1,3 +1,4 @@
+import ReactDOM from 'react-dom'
 import UserInfo from '../components/UserInfo'
 import FriendList from '../components/FriendList'
 import Posts from '../components/post/Posts'
@@ -5,24 +6,21 @@ import MainNavigation from '../components/MainNavigation'
 import { useState, useContext, useEffect, useCallback } from 'react'
 import useHttp from '../hooks/use-http'
 import { context } from '../store/context'
-import { userType, postsType, friendType } from '../App'
+import { postsType, socialType } from '../types'
 import EditProfile from '../components/EditProfile'
 import Overlay from '../UI/Overlay'
 import EditSocialProfile from '../components/EditSocialProfile'
-import ReactDOM from 'react-dom'
-
-export type socialType = 'twitter' | 'linkedin' | ''
+import Loader from '../UI/Loader'
 
 const Home = () => {
-  const [user, setUser] = useState<userType>()
-  const { userId, token } = useContext(context)
-  const { sendData } = useHttp()
+  const { token, user, updateUser } = useContext(context)
+  const { sendData, isLoading } = useHttp()
   const [posts, setPosts] = useState<postsType>([])
-  const [friends, setFriends] = useState<friendType[] | []>([])
   const [editProfile, setEditProfile] = useState<boolean>(false)
   const [isEditSocial, setIsEditSocial] = useState<boolean>(false)
   const [profile, setProfile] = useState<socialType>('')
-
+  let page = 1
+  let pageCount = 1
   const updatePosts = useCallback(() => {
     const options = {
       headers: {
@@ -30,34 +28,42 @@ const Home = () => {
       },
     }
 
-    sendData<{ posts: postsType }>(`feed/posts`, options, (res) => {
-      const posts = res?.posts
-      setPosts(posts || [])
-    })
+    sendData<{ posts: postsType }>(
+      `feed/posts?page=1&count=${pageCount}`,
+      options,
+      (res) => {
+        const posts = res?.posts
+        setPosts(posts || [])
+      }
+    )
   }, [sendData, token])
 
-  const updateUser = useCallback(() => {
+  const getPagePosts = useCallback(() => {
     const options = {
       headers: {
         Authorization: 'Bearer ' + token,
       },
     }
-
-    sendData<{ user: userType }>(`profile/${userId}`, options, (res) => {
-      const user = res?.user
-      setUser(user)
-      setFriends(user?.friends || [])
-    })
-  }, [sendData, userId, token])
+    pageCount++
+    sendData<{ posts: postsType }>(
+      `feed/posts?page=${++page}`,
+      options,
+      (res) => {
+        const posts = res?.posts
+        if (posts?.length) {
+          setPosts((prevPosts) => [...prevPosts, ...posts])
+        }
+      }
+    )
+  }, [sendData, token])
 
   useEffect(() => {
     updateUser()
-  }, [updateUser])
-
-  useEffect(() => {
     updatePosts()
-  }, [updatePosts])
+  }, [updateUser, updatePosts])
 
+
+  // handlers
   const toggleEditPopup = () => {
     setEditProfile((prev) => !prev)
   }
@@ -73,6 +79,7 @@ const Home = () => {
   return (
     <>
       <MainNavigation />
+      {isLoading && <Loader />}
       {editProfile &&
         ReactDOM.createPortal(
           <>
@@ -110,11 +117,16 @@ const Home = () => {
         />
         <Posts
           posts={posts}
-          friends={friends}
+          friends={user.friends}
           updatePosts={updatePosts}
           updateUser={updateUser}
+          getPagePosts={getPagePosts}
         />
-        <FriendList friends={friends || []} updateUser={updateUser} />
+        <FriendList
+          friends={user.friends || []}
+          updateUser={updateUser}
+          className='hidden md:block'
+        />
       </main>
     </>
   )

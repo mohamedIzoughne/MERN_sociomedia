@@ -1,12 +1,12 @@
-import classes from "./Sign.module.css"
-import useInput from "../hooks/use-input"
-import { Link, useNavigate } from "react-router-dom"
-import useHttp from "../hooks/use-http"
-import { useState } from "react"
-import Loader from "../UI/Loader"
-import ErrorMessage from "../UI/ErrorMessage"
-import ReactDOM from "react-dom"
-import Overlay from "../UI/Overlay"
+import classes from './Sign.module.css'
+import useInput from '../hooks/use-input'
+import { Link, useNavigate } from 'react-router-dom'
+import useHttp from '../hooks/use-http'
+import { useState } from 'react'
+import Loader from '../UI/Loader'
+import ErrorMessage from '../UI/ErrorMessage'
+import ReactDOM from 'react-dom'
+import Overlay from '../UI/Overlay'
 
 const Signup = () => {
   const navigate = useNavigate()
@@ -14,7 +14,7 @@ const Signup = () => {
   const { sendData, isLoading, errorMessage, setErrorMessage } = useHttp()
 
   const toggleModal = () => {
-    setErrorMessage("")
+    setErrorMessage('')
   }
 
   const imageChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -84,13 +84,13 @@ const Signup = () => {
       workIsValid
 
     if (!formIsValid) {
-      console.log("Form is invalid")
-      window.alert("Form is invalid")
+      console.log('Form is invalid')
+      window.alert('Form is invalid')
       return
     }
 
     const userInfo = {
-      fullName: enteredFirstName + " " + enteredLastName,
+      fullName: enteredFirstName + ' ' + enteredLastName,
       email: enteredEmail,
       password: enteredPassword,
       location: enteredLocation,
@@ -105,87 +105,90 @@ const Signup = () => {
     }
 
     if (userImage) {
-      infosData.append("image", userImage)
+      infosData.append('image', userImage)
     }
 
     const options = {
-      method: "POST",
+      method: 'POST',
       body: infosData,
     }
 
-    sendData("auth/register", options, () => {
-      navigate("/login")
+    sendData('auth/register', options, () => {
+      navigate('/login')
     })
   }
 
   return (
-    <form onSubmit={formSubmitHandler} className={classes.form}>
+    <form
+      onSubmit={formSubmitHandler}
+      className={classes.form + ' bg-white dark:bg-[#303030]'}
+    >
       <p>
         <b>Welcome for Sociapedia, The Social Media for Social people !</b>
       </p>
       <div className={firstNameClasses}>
-        <label htmlFor="first">First name</label>
+        <label htmlFor='first'>First name</label>
         <input
-          type="text"
-          id="first"
+          type='text'
+          id='first'
           onChange={firstNameChangeHandler}
           onBlur={firstNameBlurHandler}
         />
       </div>
       <div className={lastNameClasses}>
-        <label htmlFor="last">Last name</label>
+        <label htmlFor='last'>Last name</label>
         <input
-          type="text"
-          id="last"
+          type='text'
+          id='last'
           onChange={lastNameChangeHandler}
           onBlur={lastNameBlurHandler}
         />
       </div>
       <div className={locationClasses}>
-        <label htmlFor="location">Location</label>
+        <label htmlFor='location'>Location</label>
         <input
-          id="location"
-          type="text"
+          id='location'
+          type='text'
           onBlur={locationBlurHandler}
           onChange={locationChangeHandler}
         />
       </div>
       <div className={workClasses}>
-        <label htmlFor="work">Work</label>
+        <label htmlFor='work'>Work</label>
         <input
-          id="work"
-          type="text"
+          id='work'
+          type='text'
           onBlur={workBlurHandler}
           onChange={workChangeHandler}
         />
       </div>
-      <div className="form-control">
+      <div className='form-control'>
         <input
-          type="file"
-          className="file-upload"
+          type='file'
+          className='file-upload'
           onChange={imageChangeHandler}
         />
       </div>
       <div className={emailClasses}>
-        <label htmlFor="email">Email</label>
+        <label htmlFor='email'>Email</label>
         <input
-          type="email"
-          id="email"
+          type='email'
+          id='email'
           onChange={emailChangeHandler}
           onBlur={emailBlurHandler}
         />
       </div>
       <div className={passwordClasses}>
-        <label htmlFor="password">Password</label>
+        <label htmlFor='password'>Password</label>
         <input
-          type="password"
-          id="password"
+          type='password'
+          id='password'
           onChange={passwordChangeHandler}
           onBlur={passwordBlurHandler}
         />
       </div>
-      <button type="submit">Sign up</button>
-      <Link to={"/login"}>Already have an account ? login here</Link>
+      <button type='submit'>Sign up</button>
+      <Link to={'/login'}>Already have an account ? login here</Link>
       {isLoading && <Loader />}
       {errorMessage &&
         ReactDOM.createPortal(
@@ -193,7 +196,7 @@ const Signup = () => {
             <Overlay onClick={toggleModal} />
             <ErrorMessage message={errorMessage} toggleModal={toggleModal} />
           </>,
-          document.getElementById("modals")!
+          document.getElementById('modals')!
         )}
     </form>
   )

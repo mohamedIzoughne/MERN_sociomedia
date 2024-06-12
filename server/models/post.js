@@ -1,19 +1,26 @@
-import { Schema, Types, model } from "mongoose"
+import { Schema, Types, model } from 'mongoose'
 
 const postSchema = Schema(
   {
     content: {
       type: String,
-      required: true,
     },
-    imageUrl: {
+    fileUrl: {
       type: String,
+      required: false,
+    },
+    fileType: {
+      type: String,
+      enum: ['image', 'video', 'audio', 'application'],
+      required: false,
     },
     creator: {
       type: {
         id: {
           type: Types.ObjectId,
-          ref: "User",
+          ref: 'User',
+          unique: true,
+          required: true,
         },
         name: {
           type: String,
@@ -37,7 +44,7 @@ const postSchema = Schema(
           content: String,
           creatorId: {
             type: Types.ObjectId,
-            ref: "User",
+            ref: 'User',
             required: true,
           },
           creatorName: String,
@@ -74,4 +81,4 @@ postSchema.methods.addComment = function (comment) {
   return this.save()
 }
 
-export default model("Post", postSchema)
+export default model('Post', postSchema)

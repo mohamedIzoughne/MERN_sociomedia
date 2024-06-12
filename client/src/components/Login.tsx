@@ -71,7 +71,10 @@ const Login = () => {
   }
 
   return (
-    <form onSubmit={formSubmitHandler} className={classes.form}>
+    <form
+      onSubmit={formSubmitHandler}
+      className={classes.form + ' bg-white dark:bg-[#303030]'}
+    >
       <p>
         <b>Welcome for SocioMedia, The Social Media for Social people !</b>
       </p>
@@ -94,7 +97,9 @@ const Login = () => {
         />
       </div>
       <button type='submit'>Login</button>
-      <Link to={'/signup'}>don't have an account ? sign up here</Link>
+      <Link to={'/signup'} className='text-main'>
+        don't have an account ? sign up here
+      </Link>
       {isLoading && <Loader />}
       {errorMessage &&
         ReactDOM.createPortal(

@@ -2,20 +2,21 @@ import path from 'path'
 import User from '../models/user.js'
 import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
+import { validationResult } from 'express-validator'
 
 export const postSignUp = async (req, res, next) => {
   const { fullName, location, email, password, work } = req.body
-  let imageUrl = path.join('images', 'default-user-avatar.png')
+  let imageUrl = path.join('uploads', 'images', 'default-user-avatar.png')
 
   if (req.file) {
     imageUrl = req.file.path
   }
 
   try {
-    const user = await User.findOne({ email })
-    if (user) {
-      const error = new Error('This profile does already exist')
-      error.statusCode = 302
+    const errors = validationResult(req)
+
+    if (!errors.isEmpty()) {
+      const error = new Error(errors.array()[0].msg)
       throw error
     }
 
@@ -49,14 +50,24 @@ export const postSignUp = async (req, res, next) => {
 
 export const postLogin = async (req, res, next) => {
   const { email, password } = req.body
+  const errors = validationResult(req)
 
   try {
     const user = await User.findOne({ email })
+
+    if (!errors.isEmpty()) {
+
+      const error = new Error(errors.array()[0].msg)
+      error.statusCode = 422
+      throw error
+    }
+
     if (!user) {
       const error = new Error('There is no user with this email')
       error.statusCode = 401
       throw error
     }
+
     const doMatch = await bcrypt.compare(password, user.password)
     if (!doMatch) {
       const error = new Error('Password is incorrect')
@@ -70,7 +81,7 @@ export const postLogin = async (req, res, next) => {
         userId: user._id.toString(),
       },
       'someSuperSuperSecretKey',
-      { expiresIn: '1h' }
+      { expiresIn: '24h' }
     )
     req.userId = user.userId
     const expirationDate = new Date(Date.now() + 3600000)

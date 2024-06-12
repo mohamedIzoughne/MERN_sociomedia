@@ -13,14 +13,14 @@ const useHttp = () => {
   const sendData = useCallback(async function <responseType>(
     endpoint: string,
     options: optionsType,
-    successHandler: (data?: responseType) => void
+    successHandler?: (data?: responseType) => void
   ) {
     setIsLoading(true)
     try {
       const url = (import.meta.env.VITE_SERVER_API || '') + endpoint
       const response = await fetch(url, options)
       const data = await response.json()
-      if (response.ok) {
+      if (response.ok && successHandler) {
         successHandler(data)
       } else {
         throw new Error(data.message)

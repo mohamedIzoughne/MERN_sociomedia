@@ -1,8 +1,8 @@
-import { FormEvent, useContext, useRef } from "react"
-import { FaEdit } from "react-icons/fa"
-import { userType } from "../App.tsx"
-import useHttp from "../hooks/use-http.tsx"
-import { context } from "../store/context.tsx"
+import { FormEvent, useContext, useRef } from 'react'
+import { FaEdit } from 'react-icons/fa'
+import { userType } from '../types'
+import useHttp from '../hooks/use-http.tsx'
+import { context } from '../store/context.tsx'
 
 const EditProfile: React.FC<{
   onClick: () => void
@@ -22,10 +22,10 @@ const EditProfile: React.FC<{
     clickHandler()
 
     const userInfo = {
-      fullName: fullNameInputRef?.current?.value?.trim() || "",
-      email: emailInputRef?.current?.value?.trim() || "",
-      location: locationInputRef?.current?.value?.trim() || "",
-      work: jobInputRef?.current?.value?.trim() || "",
+      fullName: fullNameInputRef?.current?.value?.trim() || '',
+      email: emailInputRef?.current?.value?.trim() || '',
+      location: locationInputRef?.current?.value?.trim() || '',
+      work: jobInputRef?.current?.value?.trim() || '',
     }
 
     const form = new FormData()
@@ -34,103 +34,103 @@ const EditProfile: React.FC<{
       form.append(key, userInfo[key])
     }
     if (imageInputRef?.current?.files) {
-      form.append("image", imageInputRef?.current?.files[0])
+      form.append('image', imageInputRef?.current?.files[0])
     }
 
     const options = {
-      method: "POST",
+      method: 'POST',
       body: form,
       headers: {
-        Authorization: "Bearer " + token,
+        Authorization: 'Bearer ' + token,
       },
     }
 
-    sendData("profile/edit-profile", options, () => {
+    sendData('profile/edit-profile', options, () => {
       updateUser!()
     })
   }
 
   return (
     <section
-      className="w-[440px] bg-white max-w-full mx-auto p-[10px] rounded-md fixed z-30 top-20 
-    left-1/2 transform -translate-x-1/2 shadow-md border border-[#dad9d9ab]"
+      className='w-[440px] bg-white dark:bg-[#303030] dark:text-white max-w-full mx-auto p-[10px] rounded-sm fixed z-30 top-20 
+    left-1/2 transform -translate-x-1/2 shadow-md border border-[#dad9d9ab]'
     >
-      <div className="flex items-end">
+      <div className='flex items-end'>
         <div
-          className="profile-image mx-auto rounded-full w-[85px] h-[85px] overflow-hidden 
-        text-center"
+          className='profile-image mx-auto rounded-full w-[85px] h-[85px] overflow-hidden 
+        text-center'
         >
           <img
             src={`${
               import.meta.env.VITE_SERVER_API
-                ? import.meta.env.VITE_SERVER_API + (user?.imageUrl || "")
-                : ""
+                ? import.meta.env.VITE_SERVER_API + (user?.imageUrl || '')
+                : ''
             } `}
-            alt=""
+            alt=''
           />
         </div>
-        <input type="file" ref={imageInputRef} />
+        <input type='file' ref={imageInputRef} />
       </div>
       <form onSubmit={formSubmitHandler}>
-        <div className="form-control relative w-[333px] h-[47px] mx-auto mt-[17px]">
+        <div className='form-control relative w-[333px] h-[47px] mx-auto mt-[17px]'>
           <input
-            type="text"
-            name=""
-            id=""
-            className="border 
-            border-[#c2c2c2ab] text-[#3F3F3F]"
+            type='text'
+            name=''
+            id=''
+            className='border 
+            border-[#c2c2c2ab] text-[#3F3F3F] dark:text-white'
             placeholder={user?.fullName}
             ref={fullNameInputRef}
           />
           <span>
-            <FaEdit className="absolute right-[10px] top-[50%] transform -translate-y-3/4 text-[#8f8f8fa9]" />
+            <FaEdit className='absolute right-[10px] top-[50%] transform -translate-y-3/4 text-[#8f8f8fa9] dark:text-white' />
           </span>
         </div>
-        <div className="form-control relative w-[333px] h-[47px] mx-auto mt-[17px]">
+        <div className='form-control relative w-[333px] h-[47px] mx-auto mt-[17px]'>
           <input
-            type="email"
-            name=""
-            id=""
-            className="border 
-            border-[#c2c2c2ab] text-[#3F3F3F]"
+            type='email'
+            name=''
+            id=''
+            className='border 
+            border-[#c2c2c2ab] text-[#3F3F3F] dark:text-white'
             placeholder={user?.email}
             ref={emailInputRef}
           />
           <span>
-            <FaEdit className="absolute right-[10px] top-[50%] transform -translate-y-3/4 text-[#8f8f8fa9]" />
+            <FaEdit className='absolute right-[10px] top-[50%] transform -translate-y-3/4 text-[#8f8f8fa9] dark:text-white' />
           </span>
         </div>
-        <div className="form-control relative w-[333px] h-[47px] mx-auto mt-[17px]">
+        <div className='form-control relative w-[333px] h-[47px] mx-auto mt-[17px]'>
           <input
-            type="text"
-            name=""
-            id=""
-            className="border 
-            border-[#c2c2c2ab] text-[#3F3F3F]"
+            type='text'
+            name=''
+            id=''
+            className='border 
+            border-[#c2c2c2ab] text-[#3F3F3F] dark:text-white'
             placeholder={user?.location}
             ref={locationInputRef}
           />
           <span>
-            <FaEdit className="absolute right-[10px] top-[50%] transform -translate-y-3/4 text-[#8f8f8fa9]" />
+            <FaEdit className='absolute right-[10px] top-[50%] transform -translate-y-3/4 text-[#8f8f8fa9] dark:text-white' />
           </span>
         </div>
-        <div className="form-control relative w-[333px] h-[47px] mx-auto mt-[17px]">
+        <div className='form-control relative w-[333px] h-[47px] mx-auto mt-[17px]'>
           <input
-            type="text"
-            name=""
-            id=""
-            className="border 
-            border-[#c2c2c2ab] text-[#3F3F3F]"
+            type='text'
+            name=''
+            id=''
+            className='border 
+            border-[#c2c2c2ab] text-[#3F3F3F] dark:text-white'
             placeholder={user?.work}
             ref={jobInputRef}
           />
           <span>
-            <FaEdit className="absolute right-[10px] top-[50%] transform -translate-y-3/4 text-[#8f8f8fa9]" />
+            <FaEdit className='absolute right-[10px] top-[50%] transform -translate-y-3/4 text-[#8f8f8fa9] dark:text-white' />
           </span>
         </div>
         <button
-          className="w-[82px] block h-[42px] rounded-md bg-main bold ml-auto my-4"
-          type="submit"
+          className='w-[82px] block h-[42px] rounded-sm bg-main text-white bold ml-auto my-4'
+          type='submit'
         >
           Save
         </button>

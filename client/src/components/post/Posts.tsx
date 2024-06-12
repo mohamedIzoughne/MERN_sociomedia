@@ -3,7 +3,8 @@ import Post from './Post'
 import useHttp from '../../hooks/use-http'
 import { useContext } from 'react'
 import { context } from '../../store/context'
-import { friendType, postsType } from '../../App'
+import { friendType, postsType } from '../../types'
+import { IoReloadOutline } from 'react-icons/io5'
 
 type propsType = {
   posts: postsType
@@ -11,33 +12,30 @@ type propsType = {
   updateUser?: () => void
   friends?: friendType[] | []
   userPage?: true
+  getPagePosts?: () => void // after, it will be obligatory
 }
 
 const Posts: React.FC<propsType> = ({
   posts,
   updatePosts,
-  updateUser,
   friends = [],
   userPage,
+  getPagePosts,
 }) => {
   const { token } = useContext(context)
   const { sendData } = useHttp()
 
-  let addFriendHandler: (id: string) => void
-  if (!userPage) {
-    addFriendHandler = (friendId) => {
+  const addFriendHandler: (id: string) => void = (id) => {
+    if (!userPage) {
       const options = {
         method: 'PUT',
-        body: JSON.stringify({ friendId }),
         headers: {
           'Content-Type': 'application/json',
           Authorization: 'Bearer ' + token,
         },
       }
 
-      sendData('profile/add-friend', options, () => {
-        updateUser!()
-      })
+      sendData(`chat/invitation/${id}`, options)
     }
   }
 
@@ -61,6 +59,12 @@ const Posts: React.FC<propsType> = ({
           )
         })}
       </ul>
+      <button
+        className='bg-red block mx-auto cursor-pointer mb-3'
+        onClick={getPagePosts}
+      >
+        <IoReloadOutline className='text-4xl' />
+      </button>
     </section>
   )
 }

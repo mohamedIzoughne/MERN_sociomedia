@@ -1,19 +1,28 @@
 import Post from '../models/post.js'
 import User from '../models/user.js'
+import Notification from '../models/notification.js'
+import { validationResult } from 'express-validator'
 
 export async function createPost(req, res, next) {
   const { content } = req.body
-
-  let imageUrl
+  let fileUrl = ''
+  let fileType = ''
 
   if (req.file) {
-    imageUrl = req.file.path
+    fileUrl = req.file.path
+    fileType = req.file.mimetype.split('/')[0]
   }
 
   try {
+    const errors = validationResult(req)
+    if (!errors.isEmpty()) {
+      const error = new Error(errors.array()[0].msg)
+      throw error
+    }
+
     const user = await User.findById(req.userId)
     const post = new Post({
-      content,
+      content: content || '',
       creator: {
         id: user._id,
         name: user.fullName,
@@ -21,8 +30,12 @@ export async function createPost(req, res, next) {
         imageUrl: user.imageUrl,
       },
       comments: [],
-      imageUrl,
+      fileUrl,
     })
+
+    if (fileType) {
+      post.fileType = fileType
+    }
 
     await post.save()
     await user.addPost(post._id)
@@ -37,23 +50,14 @@ export async function createPost(req, res, next) {
 
 export function getPosts(req, res, next) {
   const currentPage = req.query.page || 1
-  const perPage = 10
+  const pageCount = req.query.count || 1
+  const perPage = 10 * pageCount
   let totalItems
   // should limit the posts
   Post.find()
-    .countDocuments()
-    .then((count) => {
-      totalItems = count
-
-      return Post.find()
-      // .skip((currentPage - 1) * perPage)
-      // .limit(totalItems)
-    })
+    .skip((currentPage - 1) * perPage)
+    .limit(perPage)
     .then((posts) => {
-      // if (posts.length === 0) {
-      //   const error = new Error('No posts found') // should it be an error?
-      //   error.statusCode =
-      // }
       posts.forEach((post) => {
         if (post.likes.get(req.userId)) {
           post.likedByUser = true
@@ -72,6 +76,12 @@ export async function getUserPosts(req, res, next) {
   const { userId } = req.params
 
   try {
+    const errors = validationResult(req)
+    if (!errors.isEmpty()) {
+      const error = new Error(errors.array()[0].msg)
+      throw error
+    }
+
     const posts = await Post.find({ 'creator.id': userId })
     await posts.forEach((post) => {
       if (post.likes.get(req.userId)) {
@@ -89,17 +99,12 @@ export async function deletePost(req, res, next) {
   const { userId } = req
   // should i check if post exists first
   try {
-    const post = await Post.findById(postId)
-    if (!post) {
-      const error = new Error('Could not find post')
-      error.statusCode = 404
+    const errors = validationResult(req)
+    if (!errors.isEmpty()) {
+      const error = new Error(errors.array()[0].msg)
       throw error
     }
-    if (post.creatorId.toString() !== req.userId) {
-      const error = new Error('Not authorized')
-      error.statusCode = 403
-      throw error
-    }
+
     await Post.deleteOne({ _id: postId })
     const user = await User.findById(userId)
     await user.deletePost(postId)
@@ -114,19 +119,15 @@ export async function updatePost(req, res, next) {
   const updatedContent = req.body.newContent
 
   try {
-    const post = await Post.findById(postId)
-    if (!post) {
-      const error = new Error('Could not find post')
-      error.statusCode = 404
-      throw error
-    } else if (post.creatorId.toString() !== req.userId) {
-      const error = new Error('Not authorized')
-      error.statusCode = 403
+    const errors = validationResult(req)
+    if (!errors.isEmpty()) {
+      const error = new Error(errors.array()[0].msg)
       throw error
     }
+
+    const post = await Post.findById(postId)
     post.content = updatedContent
     await post.save()
-    await res.status(301).json({ message: 'Post updated', post })
   } catch (error) {
     next(error)
   }
@@ -135,14 +136,40 @@ export async function updatePost(req, res, next) {
 export async function updateLikes(req, res, next) {
   const postId = req.params.postId
   const { action } = req.body
+  const postUserId = req.body.userId
 
   try {
+    const errors = validationResult(req)
+    if (!errors.isEmpty()) {
+      const error = new Error(errors.array()[0].msg)
+      throw error
+    }
+
     const post = await Post.findById(postId)
+    const user = await User.findById(req.userId)
+    const postUser = await User.findById(postUserId)
+
     if (action === 'increment') {
       await post.likeIncrement(req.userId)
+
+      if (postUserId !== req.userId) {
+        const notification = await new Notification({
+          creator: {
+            id: req.userId,
+            name: user.fullName,
+            imageUrl: user.imageUrl,
+          },
+          recipient: postUserId,
+          type: 'like',
+        })
+        postUser.impressionsOnPosts++
+        await notification.save()
+        await postUser.save()
+      }
     } else {
       await post.likeDecrement(req.userId)
     }
+
     await res.status(201).json({ message: 'likes updated' })
   } catch (error) {
     next(error)
@@ -152,6 +179,7 @@ export async function updateLikes(req, res, next) {
 export async function putAddComment(req, res, next) {
   const postId = req.params.postId
   const content = req.body.comment
+  const postUserId = req.body.userId
 
   try {
     const user = await User.findById(req.userId)
@@ -159,10 +187,25 @@ export async function putAddComment(req, res, next) {
       creatorId: req.userId,
       creatorName: user.fullName,
       content,
-      creatorImageUrl: '',
+      creatorImageUrl: user.imageUrl,
     }
     const post = await Post.findById(postId)
-    const updatedPost = await post.addComment(comment)
+    await post.addComment(comment)
+    if (postUserId !== req.userId) {
+      const notification = await new Notification({
+        creator: {
+          id: req.userId,
+          name: user.fullName,
+          imageUrl: user.imageUrl,
+        },
+        recipient: postUserId,
+        type: 'comment',
+      })
+
+      user.impressionsOnPosts++
+      await notification.save()
+      await user.save()
+    }
     await res.status(201).json({ post })
   } catch (error) {
     next(error)

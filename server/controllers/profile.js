@@ -1,16 +1,22 @@
-import User from "../models/user.js"
-import Post from "../models/post.js"
-
+import User from '../models/user.js'
+import Post from '../models/post.js'
+import Notification from '../models/notification.js'
 export async function getProfile(req, res, next) {
   const userId = req.params.userId
 
   try {
     const user = await User.findById(userId)
     if (!user) {
-      const error = new Error("User not found")
+      const error = new Error('User not found')
       error.statusCode = 404
       throw error
     }
+
+    if (userId !== req.userId) {
+      user.profileViews += 1
+    }
+
+    await user.save()
     await res.json({ user })
   } catch (error) {
     next(error)
@@ -20,10 +26,11 @@ export async function getProfile(req, res, next) {
 export async function putAddFriend(req, res, next) {
   const friendId = req.body.friendId
 
+  // I don't know if I should put this validation in routes or controllers
   try {
     const user = await User.findById(req.userId)
     if (!user) {
-      const error = new Error("User not found")
+      const error = new Error('User not found')
       error.statusCode = 404
       throw error
     }
@@ -40,7 +47,7 @@ export async function putAddFriend(req, res, next) {
       ) >= 0
 
     if (friendExists || userExists) {
-      const error = new Error("Friend already exists")
+      const error = new Error('Friend already exists')
       error.statusCode = 409
       throw error
     } else {
@@ -58,9 +65,15 @@ export async function putAddFriend(req, res, next) {
         imageUrl: user.imageUrl,
       })
       friend.friends = friendFriends
+      await Notification.deleteMany({
+        recipient: req.userId,
+        'creator.id': friendId,
+        type: 'invitation',
+      })
 
       await user.save()
-      await res.json({ message: "Friend added" })
+      await friend.save()
+      await res.json({ message: 'Friend added' })
     }
   } catch (error) {
     next(error)
@@ -69,17 +82,18 @@ export async function putAddFriend(req, res, next) {
 
 export function deleteFriend(req, res, next) {
   const friendId = req.body.friendId
-  let updatedFriends
+
   User.findById(req.userId).then((user) => {
     if (!user) {
-      const error = new Error("User not found")
+      const error = new Error('User not found')
       error.statusCode = 404
       throw error
     }
+    let updatedFriends
     updatedFriends = [...user.friends].filter((fr) => {
       return fr.friendId.toString() !== friendId.toString()
     })
-
+    // if it is already authenticated, should I check if that user exists or not ??
     user.friends = updatedFriends
     return user
       .save()
@@ -88,7 +102,7 @@ export function deleteFriend(req, res, next) {
       })
       .then((friend) => {
         if (!friend) {
-          const error = new Error("User not found")
+          const error = new Error('User not found')
           error.statusCode = 404
           throw error
         }
@@ -99,7 +113,7 @@ export function deleteFriend(req, res, next) {
         return friend.save()
       })
       .then(() => {
-        res.json({ message: "friend removed", friends: updatedFriends })
+        res.json({ message: 'friend removed', friends: updatedFriends })
       })
       .catch((err) => {
         next(err)
@@ -118,7 +132,7 @@ export function getFriends(req, res, next) {
         throw error
       }
     })
-    .populate("friends.friendId")
+    .populate('friends.friendId')
     .then((user) => {
       return user.friends
     })
@@ -137,7 +151,7 @@ export function postAccount(req, res, next) {
   User.findById(userId)
     .then(async (user) => {
       if (!user) {
-        const error = new Error("User not found")
+        const error = new Error('User not found')
         error.statusCode = 404
         throw error
       }
@@ -161,7 +175,7 @@ export function editProfile(req, res, next) {
   User.findById(userId)
     .then((user) => {
       if (!user) {
-        const error = new Error("User not found")
+        const error = new Error('User not found')
         error.statusCode = 404
         throw error
       }
@@ -172,7 +186,7 @@ export function editProfile(req, res, next) {
       user.save()
     })
     .then(() => {
-      Post.find({ "creator.id": req.userId }).then((posts) => {
+      Post.find({ 'creator.id': req.userId }).then((posts) => {
         posts.forEach(async (post) => {
           const newCreator = { imageUrl, location, name: fullName }
           for (const key in newCreator) {

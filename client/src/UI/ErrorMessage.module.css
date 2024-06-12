@@ -1,6 +1,10 @@
 .modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
   transform: translate(-50%, -50%);
-  animation: popup 0.5s ease;
+  transform-origin: center center;
+  animation: popup 0.5s;
 }
 
 .frame {
@@ -9,7 +13,7 @@
 
 @keyframes popup {
   0% {
-    transform: scale(0.8) translate(-50%, -50%);
+    transform: scale(0) translate(-50%, -50%);
   }
   50% {
     transform: scale(1.2) translate(-50%, -50%);

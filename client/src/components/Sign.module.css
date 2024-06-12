@@ -1,36 +1,33 @@
 .form {
+  @apply rounded-sm;
   width: 550px;
   max-width: calc(100% - 20px);
-  background: white;
   padding: 30px 10px;
   margin: 40px auto;
-  border-radius: 10px;
 }
 
 .form button {
+  @apply bg-main hover:bg-[#60a5ff] text-white;
   width: 100%;
-  background: #5bdcff;
   border: none;
   padding-block: 10px;
   cursor: pointer;
-  color: #676767;
   font-weight: bold;
   transition-duration: 0.2s;
   margin-bottom: 7px;
 }
 
-.form button:hover {
+/* .form button:hover {
   background-color: #afeeff;
   color: #013442;
-}
+} */
 
 .form > p:first-child {
   line-height: 1;
-  margin-bottom: 3px;
+  margin-bottom: 5px;
 }
 
 .form > a:last-child {
-  color: #32d3ff;
   font-size: 0.8rem;
   cursor: pointer;
 }

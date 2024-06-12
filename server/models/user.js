@@ -1,4 +1,4 @@
-import mongoose from "mongoose"
+import mongoose from 'mongoose'
 
 const userSchema = mongoose.Schema({
   fullName: {
@@ -22,7 +22,7 @@ const userSchema = mongoose.Schema({
       {
         friendId: {
           type: mongoose.Types.ObjectId,
-          ref: "User",
+          ref: 'User',
           required: true,
         },
         name: {
@@ -47,6 +47,7 @@ const userSchema = mongoose.Schema({
   },
   profileViews: {
     type: Number,
+    default: 0,
   },
   socialProfiles: {
     type: {
@@ -59,13 +60,20 @@ const userSchema = mongoose.Schema({
       {
         postId: {
           type: mongoose.Types.ObjectId,
-          ref: "Post",
+          ref: 'Post',
           required: true,
+          unique: true
         },
       },
     ],
   },
+  impressionsOnPosts: {
+    type: Number,
+    default: 0,
+  },
 })
+
+userSchema.index({email: 1, password: 1})
 
 userSchema.methods.addPost = function (postId) {
   const updatedPosts = [...this.posts, { postId }]
@@ -79,4 +87,4 @@ userSchema.methods.deletePost = function (postId) {
   return this.save()
 }
 
-export default mongoose.model("User", userSchema)
+export default mongoose.model('User', userSchema)

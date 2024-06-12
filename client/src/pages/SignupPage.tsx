@@ -3,8 +3,8 @@ import Signup from '../components/Signup'
 const SignUpPage = (props: { hasAccount: boolean }) => {
   return (
     <>
-      <header>
-        <h1 className='text-center text-lg p-[15px] bg-white text-main font-bold'>
+      <header className='bg-white dark:bg-[#303030]'>
+        <h1 className='text-center text-lg p-[15px] text-main font-bold'>
           SocioMedia{' '}
         </h1>
       </header>

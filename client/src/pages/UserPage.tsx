@@ -5,11 +5,10 @@ import { useEffect, useState, useCallback, useContext } from 'react'
 import useHttp from '../hooks/use-http'
 import { context } from '../store/context'
 import { useParams } from 'react-router-dom'
-import { userType, postsType } from '../App'
 import EditProfile from '../components/EditProfile'
 import Overlay from '../UI/Overlay'
 import EditSocialProfile from '../components/EditSocialProfile'
-import { socialType } from './Home'
+import { socialType,  userType, postsType } from '../types'
 import ReactDOM from 'react-dom'
 
 const UserPage = () => {
@@ -53,6 +52,7 @@ const UserPage = () => {
     updatePosts()
   }, [updatePosts])
 
+  // handlers
   const toggleEditPopup = () => {
     setEditProfile((prev) => !prev)
   }
