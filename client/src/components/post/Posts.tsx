@@ -36,6 +36,7 @@ const Posts: React.FC<propsType> = ({
       }
 
       sendData(`chat/invitation/${id}`, options)
+      window.alert('invitation sent')
     }
   }
 

@@ -75,7 +75,7 @@ const Post: React.FC<propsType> = ({
       <div className='flex pb-3 items-center rounded-sm'>
         <div className='image w-14 h-14 overflow-hidden rounded-full'>
           <img
-          className=' object-cover w-full h-full'
+            className=' object-cover w-full h-full'
             src={`${
               import.meta.env.VITE_SERVER_API
                 ? import.meta.env.VITE_SERVER_API +
@@ -108,8 +108,10 @@ const Post: React.FC<propsType> = ({
           )}
         </div>
       </div>
-      <div className='content  px-3'>
-        <p className='mb-2'>{currentPost.content}</p>
+      <div className='content px-3'>
+        <p className='mb-2'>
+          {currentPost.content}
+        </p>
         <div className='flex justify-center'>
           {post?.fileUrl ? (
             <Media

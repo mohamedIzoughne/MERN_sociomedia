@@ -31,10 +31,11 @@ const MessageItem: React.FC<{
         (isUser ? 'flex-row-reverse ml-auto' : ' mr-auto')
       }
     >
-      <div className='image-holder w-[30px] h-[30px] mt-1'>
-        <img src={imageUrl} alt='' />
+      <div className='image-holder w-[30px] h-[30px] overflow-hidden mt-1'>
+        <img className='w-full h-full object-cover' src={imageUrl} alt='' />
       </div>
       <div
+        dir='auto'
         className={
           'message w-[245px]min-w-[61px] p-2 leading-none' +
           (isUser ? ' bg-main text-white ' : ' bg-[#E9EFFF]  text-black')

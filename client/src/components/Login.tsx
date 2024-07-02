@@ -97,7 +97,7 @@ const Login = () => {
         />
       </div>
       <button type='submit'>Login</button>
-      <Link to={'/signup'} className='text-main'>
+      <Link to={'/signup'} className='text-main dark:text-white'>
         don't have an account ? sign up here
       </Link>
       {isLoading && <Loader />}

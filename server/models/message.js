@@ -15,7 +15,7 @@ const messageSchema = mongoose.Schema(
     },
     //   required: true,
   },
-  { timeStamps: true }
+  { timestamps: true }
 )
 
 // I'm not sure if we should use indexes or not

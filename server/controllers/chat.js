@@ -51,7 +51,7 @@ export const getMessages = async (req, res, next) => {
         { creator: user1, recipient: user2 },
         { creator: user2, recipient: user1 },
       ],
-    })
+    }).sort({ createdAt: 1 })
 
     await res.json({ messages })
   } catch (err) {
