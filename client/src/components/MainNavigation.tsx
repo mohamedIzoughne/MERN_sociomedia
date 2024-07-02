@@ -201,7 +201,7 @@ const Notifications = () => {
   const [isNotified, setIsNotified] = useState<boolean>(false)
   const [chosenType, setChosenType] = useState('all')
   const { sendData } = useHttp()
-  const { userId } = useContext(context)
+  const { userId, token } = useContext(context)
 
   const toggleNotifications = () => {
     setIsShown((prev) => !prev)
@@ -215,6 +215,9 @@ const Notifications = () => {
   const getNotifications = useCallback(() => {
     const options = {
       method: 'GET',
+      headers: {
+        Authorization: 'Bearer ' + token,
+      },
     }
 
     sendData<{ notifications: [] }>(

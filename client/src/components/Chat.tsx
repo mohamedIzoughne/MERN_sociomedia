@@ -48,7 +48,7 @@ const MessageItem: React.FC<{
 
 const Chat = () => {
   const [showChatBody, setShowChatBody] = useState(true)
-  const { chatHandler, chattedTo, userId } = useContext(context)
+  const { chatHandler, chattedTo, userId, token } = useContext(context)
   const [messages, setMessages] = useState<messageType[]>([])
   const [message, setMessage] = useState('')
 
@@ -76,6 +76,12 @@ const Chat = () => {
   }
 
   useEffect(() => {
+    const options = {
+      method: 'GET',
+      headers: {
+        Authorization: 'Bearer ' + token,
+      },
+    }
     socket.emit('register', userId)
     socket.on('chat', (msg) => {
       setMessages((prev) => [...prev, msg])
@@ -83,7 +89,7 @@ const Chat = () => {
 
     sendData<{ messages: [] }>(
       `chat/messages?user1=${userId}&user2=${chattedTo.id}`,
-      { method: 'GET' },
+      options,
       (res) => {
         if (res) {
           setMessages(res.messages)
