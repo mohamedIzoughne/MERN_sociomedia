@@ -73,9 +73,9 @@ const MobileNav: React.FC<{ togglePublish: () => void }> = ({
   return (
     <>
       {navIsOpen && <Overlay className='z-10' onClick={toggleNav} />}
-      <nav className='main-navigation sticky top-0 z-10 bg-white dark:bg-[#303030]'>
+      <nav className='main-navigation sticky top-0 z-30 bg-white dark:bg-[#303030]'>
         <div className='container py-3 flex items-center'>
-          <div className='logo'>
+          <div className='logo mr-auto'>
             <Link to='/'>
               <h2 className='text-main text-3xl cursor-pointer font-cursive'>
                 SocioMedia
@@ -89,10 +89,9 @@ const MobileNav: React.FC<{ togglePublish: () => void }> = ({
               placeholder='Search'
             />
           </div> */}
-          <NavItem onClick={togglePublish} icon={<MdAddCircleOutline />} />
           {navIsOpen && (
             <ul
-              className='absolute z-30 top-[76px] left-0 bg-white dark:bg-[#3c3c3c] w-full ml-auto py-3 
+              className='absolute top-[76px] left-0 bg-white dark:bg-[#3c3c3c] w-full ml-auto py-3 
             border-slate-100 border-t-2 border-solid dark:border-none'
             >
               <MobileNavItem
@@ -113,6 +112,7 @@ const MobileNav: React.FC<{ togglePublish: () => void }> = ({
               />
             </ul>
           )}
+          <NavItem onClick={togglePublish} icon={<MdAddCircleOutline />} />
           <div className='menu-button p-2 cursor-pointer text-4xl mr-3 rounded-full flex items-center'>
             <button onClick={toggleNav}>
               {navIsOpen ? <BiX /> : <BiMenu />}
@@ -149,16 +149,15 @@ const NotificationItem: React.FC<{
 
   const refuseHandler = () => {
     const options = {
-      method: 'POST',
+      method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ recipientId: '', senderId: '' }),
+      body: JSON.stringify({ notificationId: notification._id }),
     }
 
     setIsShown(false) // optimistic
-
-    sendData(`${import.meta.env.VITE_SERVER_API || ''}refuse-friend`, options)
+    sendData(`profile/refuse-friend`, options)
   }
 
   if (!isShown) return null
@@ -199,7 +198,7 @@ const NotificationItem: React.FC<{
 const Notifications = () => {
   const [isShown, setIsShown] = useState(false)
   const [notifications, setNotifications] = useState<notificationType[]>([])
-  const [isNotified, setIsNotified] = useState(notifications.length > 0)
+  const [isNotified, setIsNotified] = useState<boolean>(false)
   const [chosenType, setChosenType] = useState('all')
   const { sendData } = useHttp()
   const { userId } = useContext(context)
@@ -232,6 +231,10 @@ const Notifications = () => {
   useEffect(() => {
     getNotifications()
   }, [getNotifications])
+
+  useEffect(() => {
+    setIsNotified(notifications.length > 0)
+  }, [notifications])
 
   return (
     <div className='relative'>

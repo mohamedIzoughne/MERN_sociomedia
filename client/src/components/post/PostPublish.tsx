@@ -101,6 +101,7 @@ const PostPublish: React.FC<{ updatePosts: () => void }> = ({
         <input
           ref={postInputRef}
           value={postContent}
+          dir='auto'
           onChange={postContentChangeHandler}
           className='bg-secondary dark:bg-[#595959]  outline-none flex-grow  p-4 ml-3 rounded-sm  resize-none overflow-hidden'
           placeholder="What's on your mind ?"

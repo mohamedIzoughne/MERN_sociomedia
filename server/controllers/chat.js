@@ -2,24 +2,6 @@ import { getIO } from '../socket.js'
 import Notification from '../models/notification.js'
 import User from '../models/user.js'
 import Message from '../models/message.js'
-import { error } from 'console'
-
-export const messages = (req, res, next) => {
-  const { message } = req.body
-  const users = {}
-
-  // getIO().emit('messages', { action: 'create', message })
-  const socket = getIO()
-  socket.on('register', (userId) => {
-    users[userId] = socket.id
-  })
-  console.log(users)
-  // getIO().on('chat', (msg) => {
-
-  // })
-
-  res.json({ message: 'message added' })
-}
 
 export const sendInvitation = async (req, res, next) => {
   const notifiedId = req.params.notifiedId
@@ -61,19 +43,19 @@ export const getNotifications = async (req, res, next) => {
   }
 }
 
-export const getMessages = (async (req, res, next) => {
-  const { user1, user2 } = req.query;
+export const getMessages = async (req, res, next) => {
+  const { user1, user2 } = req.query
+
   try {
     const messages = await Message.find({
       $or: [
         { creator: user1, recipient: user2 },
-        { creator: user2, recipient: user1 }
-      ]
-    })
-    
+        { creator: user2, recipient: user1 },
+      ],
+    }).sort({ createdAt: 'desc' })
 
-    res.json({messages});
+    await res.json({ messages })
   } catch (err) {
     next(err)
   }
-});
+}

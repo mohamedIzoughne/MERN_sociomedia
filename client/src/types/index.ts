@@ -58,6 +58,7 @@ export type socialMediaType = {
 }
 
 export type notificationType = {
+  _id: string
   creator: {
     id: string,
     name: string,

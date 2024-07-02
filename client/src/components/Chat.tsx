@@ -162,6 +162,7 @@ const Chat = () => {
       >
         <input
           type='text'
+          dir='auto'
           value={message}
           onChange={(e) => setMessage(e.currentTarget.value)}
           className='bg-[#ECEEF4] w-[265px] h-[51px] pl-3 pr-1 outline-main'

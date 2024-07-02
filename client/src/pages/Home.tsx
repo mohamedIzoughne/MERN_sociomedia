@@ -10,7 +10,7 @@ import { postsType, socialType } from '../types'
 import EditProfile from '../components/EditProfile'
 import Overlay from '../UI/Overlay'
 import EditSocialProfile from '../components/EditSocialProfile'
-import Loader from '../UI/Loader'
+import Loader from '../UI/Loader' 
 
 const Home = () => {
   const { token, user, updateUser } = useContext(context)

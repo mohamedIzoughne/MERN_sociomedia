@@ -1,3 +1,4 @@
+import Notification from '../models/notification.js'
 import { Router } from 'express'
 const router = Router()
 import { check, body } from 'express-validator'
@@ -54,5 +55,20 @@ router.post(
   isAuth,
   editProfile
 )
+
+router.delete('/refuse-friend', async (req, res, next) => {
+  const { notificationId } = req.body
+  console.log(notificationId)
+  try {
+    const deleted = await Notification.findByIdAndDelete({
+      _id: notificationId,
+    })
+
+    await res.json({ message: 'refused friend' })
+  } catch (err) {
+    console.log(err)
+    next(err)
+  }
+})
 
 export default router
