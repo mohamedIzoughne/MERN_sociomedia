@@ -39,6 +39,7 @@ const UserInfo: React.FC<{
         <Link className='flex items-center' to={`/user/${user?._id}`}>
           <div className='image-holder w-14 h-14 overflow-hidden rounded-full'>
             <img
+              className='w-full h-full object-cover'
               src={`${
                 import.meta.env.VITE_SERVER_API
                   ? import.meta.env.VITE_SERVER_API + (user?.imageUrl || '')

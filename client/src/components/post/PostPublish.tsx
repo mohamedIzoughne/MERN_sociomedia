@@ -193,7 +193,7 @@ const PostPublish: React.FC<{ updatePosts: () => void }> = ({
           <li>
             <button
               type='submit'
-              className='py-2 px-3 bg-main text-white rounded-sm w-16'
+              className='py-2 px-3 bg-main text-white rounded-sm w-16 rounded-full'
             >
               Post
             </button>

@@ -5,7 +5,6 @@ import Message from '../models/message.js'
 
 export const sendInvitation = async (req, res, next) => {
   const notifiedId = req.params.notifiedId
-  console.l
   try {
     const user = await User.findById(req.userId)
     if (!user) {

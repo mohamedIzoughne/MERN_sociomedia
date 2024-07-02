@@ -62,7 +62,6 @@ const userSchema = mongoose.Schema({
           type: mongoose.Types.ObjectId,
           ref: 'Post',
           required: true,
-          unique: true
         },
       },
     ],
@@ -73,7 +72,7 @@ const userSchema = mongoose.Schema({
   },
 })
 
-userSchema.index({email: 1, password: 1})
+// userSchema.index({email: 1, password: 1})
 
 userSchema.methods.addPost = function (postId) {
   const updatedPosts = [...this.posts, { postId }]

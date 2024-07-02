@@ -19,7 +19,6 @@ const postSchema = Schema(
         id: {
           type: Types.ObjectId,
           ref: 'User',
-          unique: true,
           required: true,
         },
         name: {
